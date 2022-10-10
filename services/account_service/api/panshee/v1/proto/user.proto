@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package api.panshee.v1.proto;
+
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/protobuf/timestamp.proto";
+
+option java_package = "api.panshee.v1.proto";
+option java_multiple_files = true;
+option java_outer_classname = "UserProto";
+
+option go_package = ".;pb";
+
+// A representation of a User
+message User {
+    // Id of the user
+    int32 id = 1;
+    // Email of the user
+    string email = 2;
+    // User have active account or not
+    bool active = 3;
+}
+
+// A representation of a request for creating user
+message CreateUserRequest {
+    // The parent resource where this user will be created.
+    string parent = 1 [
+        (google.api.field_behavior) = REQUIRED,
+        (google.api.resource_reference).type = "library.googleapis.com/User"
+    ];
+    // Password for created user
+    string password = 2 [(google.api.field_behavior) = REQUIRED];
+
+    // User to create
+    User user = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+// A representation of a request for user logging
+message LoginUserRequest {
+    // Provided login email of the user
+    string email = 1 [(google.api.field_behavior) = REQUIRED];
+    // Provided login password of the user
+    string password = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// A representation of a response for user logging
+message LoginUserResponse {
+    // Id of current user session
+    string session_id = 1;
+    // Access tokken string
+    string access_token = 2;
+    // Expiration time of the access token
+    google.protobuf.Timestamp access_token_expiration_time = 3;
+    // Refresh token string
+    string refresh_token = 4;
+    // Expiration time of the refresh token
+    google.protobuf.Timestamp refresh_token_expiration_time = 5;
+    // Logged user data
+    User user = 6;
+}
+
+// A representation of a request for resetting password
+message ResetPasswordRequest {
+    string email = 1 [(google.api.field_behavior) = REQUIRED];
+}

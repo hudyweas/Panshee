@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package api.panshee.v1.proto;
+
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+import "panshee/v1/proto/email.proto";
+
+option go_package = ".;pb";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+    info: {
+      title: "panshee/services/email_service";
+      version: "1.0";
+      contact: {
+        name: "Jakub Hudziak";
+        url: "https://github.com/hudyweas/";
+        email: "hudyweas@gmail.com";
+      };
+    };
+};
+
+service PansheeEmailService {
+    rpc SendEmail (SendEmailRequest) returns (SendEmailResponse) {}
+}

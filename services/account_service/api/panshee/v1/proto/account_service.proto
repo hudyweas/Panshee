@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package api.panshee.v1.proto;
+
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+
+import "panshee/v1/proto/user.proto";
+
+option go_package = ".;pb";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+    info: {
+      title: "Panshee_account_service";
+      version: "1.0";
+      contact: {
+        name: "Jakub Hudziak";
+        url: "https://github.com/hudyweas/";
+        email: "hudyweas@gmail.com";
+      };
+    };
+};
+
+service PansheeUserRestService {
+    rpc CreateUser (CreateUserRequest) returns (User) {
+        option (google.api.http) = {
+            post: "/v1/{parent=user/*}"
+            body: "user"
+        };
+
+        option (google.api.method_signature) = "user,password";
+    }
+
+    rpc LoginUser (LoginUserRequest) returns (LoginUserResponse) {
+        option (google.api.http) = {
+            post: "/v1/login_user"
+            body: "*"
+        };
+    }
+
+    rpc ResetPassword (ResetPasswordRequest) returns (google.protobuf.Empty){
+        option (google.api.http) = {
+            post: "/v1/{parent=user/*}/reset_password"
+            body: "user"
+        };
+    }
+}
