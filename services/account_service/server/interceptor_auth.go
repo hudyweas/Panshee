@@ -15,8 +15,9 @@ import (
 func (s *Server) AuthUnaryServerInterceptor() grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		//checking if path needs to auth
-		path := strings.Replace(info.FullMethod, "/pb.PansheeUserRestService/", "", 1)
-		if path == "LoginUser"{
+		path := strings.Replace(info.FullMethod, "/api.panshee.v1.proto.PansheeAccountService/", "", 1)
+		if path == "LoginUser" ||
+			path == "RegisterUser" {
 			return handler(ctx, req)
 		}
 
@@ -26,7 +27,7 @@ func (s *Server) AuthUnaryServerInterceptor() grpc.UnaryServerInterceptor {
 			return nil, fmt.Errorf("missing metadata")
 		}
 
-		authHeader := md.Get("auth")
+		authHeader := strings.Fields(md.Get("authorization")[0])
 
 		//checking if header is not empty
 		if len(authHeader) == 0 {
@@ -34,7 +35,7 @@ func (s *Server) AuthUnaryServerInterceptor() grpc.UnaryServerInterceptor {
 		}
 
 		if len(authHeader) < 2 {
-			return nil, fmt.Errorf("wrong auth header format")
+			return nil, fmt.Errorf("invalid auth header format")
 		}
 
 		authType := authHeader[0]

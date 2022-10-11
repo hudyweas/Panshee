@@ -22,11 +22,11 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
     };
 };
 
-service PansheeUserRestService {
-    rpc CreateUser (CreateUserRequest) returns (User) {
+service PansheeAccountService {
+    rpc RegisterUser (RegisterUserRequest) returns (User) {
         option (google.api.http) = {
             post: "/v1/{parent=user/*}"
-            body: "user"
+            body: "*"
         };
 
         option (google.api.method_signature) = "user,password";
@@ -39,10 +39,10 @@ service PansheeUserRestService {
         };
     }
 
-    rpc ResetPassword (ResetPasswordRequest) returns (google.protobuf.Empty){
+    rpc ChangePassword (ChangePasswordRequest) returns (ChangePasswordResponse){
         option (google.api.http) = {
-            post: "/v1/{parent=user/*}/reset_password"
-            body: "user"
+            post: "/v1/user/{id=*}/change_password"
+            body: "*"
         };
     }
 }

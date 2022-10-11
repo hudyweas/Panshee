@@ -8,7 +8,7 @@ import (
 )
 
 type Server struct {
-	pb.UnimplementedPansheeUserRestServiceServer
+	pb.UnimplementedPansheeAccountServiceServer
 
 	db             database.Database
 	config         config.Config

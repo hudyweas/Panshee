@@ -23,17 +23,18 @@ message User {
 }
 
 // A representation of a request for creating user
-message CreateUserRequest {
+message RegisterUserRequest {
     // The parent resource where this user will be created.
     string parent = 1 [
         (google.api.field_behavior) = REQUIRED,
         (google.api.resource_reference).type = "library.googleapis.com/User"
     ];
-    // Password for created user
-    string password = 2 [(google.api.field_behavior) = REQUIRED];
 
-    // User to create
-    User user = 3 [(google.api.field_behavior) = REQUIRED];
+    // Email for created user
+    string email = 2 [(google.api.field_behavior) = REQUIRED];
+
+    // Password for created user
+    string password = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
 // A representation of a request for user logging
@@ -60,7 +61,19 @@ message LoginUserResponse {
     User user = 6;
 }
 
-// A representation of a request for resetting password
-message ResetPasswordRequest {
-    string email = 1 [(google.api.field_behavior) = REQUIRED];
+// A representation of a request for changing password
+message ChangePasswordRequest {
+    //id of the user
+    string id = 1 [
+        (google.api.field_behavior) = REQUIRED,
+        (google.api.resource_reference).type = "library.googleapis.com/User"
+    ];
+
+    //New password
+    string password = 2;
+}
+
+// A representation of a response for changing password
+message ChangePasswordResponse{
+    User user = 1;
 }

@@ -15,6 +15,9 @@ type Database interface {
 	//User
 	UserCreate(email, password string) (*User, error)
 	UserSelectByEmail(email string) (*User, error)
+	UserSelectById(id int) (*User, error)
+
+	UserPasswordUpdateByID(id int, password string) (*User, error)
 
 	//Session
 	SessionCreate(session Session) (*Session, error)

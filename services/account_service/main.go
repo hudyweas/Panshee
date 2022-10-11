@@ -71,7 +71,7 @@ func runGrpcServer(config config.Config, db database.Database, errors chan error
 		)),
 	)
 
-	pb.RegisterPansheeUserRestServiceServer(grpcServer, server)
+	pb.RegisterPansheeAccountServiceServer(grpcServer, server)
 	reflection.Register(grpcServer)
 
 	listener, err := net.Listen("tcp", config.GRPC_ADDRESS)
@@ -102,7 +102,7 @@ func runGatewayServer(config config.Config, db database.Database, errors chan er
 	c, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	if err := pb.RegisterPansheeUserRestServiceHandlerFromEndpoint(c, grpcMux, config.GRPC_ADDRESS, dialOptions); err != nil {
+	if err := pb.RegisterPansheeAccountServiceHandlerFromEndpoint(c, grpcMux, config.GRPC_ADDRESS, dialOptions); err != nil {
 		errors <- fmt.Errorf("cannot register handler server: %s", err)
 	}
 

@@ -13,7 +13,7 @@ type Server struct {
 }
 
 func NewServer(config config.Config) (s *Server) {
-	emailSender, err := email.NewEmailSender(config.EMAIL_ADDRESS, config.EMAIL_PASSWORD, config.EMAIL_SERVER)
+	emailSender, err := email.NewEmailSender(config.EMAIL_ADDRESS, config.EMAIL_PASSWORD)
 	if err != nil{
 		panic(err)
 	}

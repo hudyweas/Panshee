@@ -16,9 +16,9 @@ import (
 func (s *Server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (*pb.LoginUserResponse, error) {
 	md := util.GetMetadatas(ctx)
 
-	//validating user email
-	if err := val.ValidateEmail(req.GetEmail()); err != nil {
-		return nil, status.Errorf(codes.NotFound, "invalid email")
+	//validating request
+	if validationErrors := validateLoginUserRequest(req); len(validationErrors) > 0{
+		return nil, status.Errorf(codes.InvalidArgument, validationErrors)
 	}
 
 	//getting user password from database
@@ -31,12 +31,12 @@ func (s *Server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (*pb.L
 		return nil, err
 	}
 
-	//checking password validation
+	//checking password validation with hash from database
 	if err := val.ValidateHash(user.Password, req.GetPassword()); err != nil {
 		return nil, status.Errorf(codes.NotFound, "invalid password")
 	}
 
-	//get access token
+	//creating access token
 	accessToken, accessTokenPayload, err := s.tokenGenerator.CreateToken(req.GetEmail(), s.config.ACCESS_TOKEN_DURATION)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "creating access token failed: %s", err)
@@ -73,4 +73,18 @@ func (s *Server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (*pb.L
 	}
 
 	return rsp, nil
+}
+
+func validateLoginUserRequest(req *pb.LoginUserRequest) (errors string){
+	//validating email from request
+	if err := val.ValidateEmail(req.GetEmail()); err != nil {
+		errors += "invalid email" + "\n"
+	}
+
+	//validating password from request
+	if err := val.ValidatePassword(req.GetPassword()); err != nil{
+		errors += err.Error() + "\n"
+	}
+
+	return
 }
