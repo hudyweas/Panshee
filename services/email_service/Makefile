@@ -2,10 +2,7 @@ network:
 	docker network create panshee-network
 
 dserver:
-	docker run --name account_service --network panshee-network -p 8080:8080 -e PANSHEE_ACCOUNT_SERVICE_DB_HOST=panshee_database -e GIN_MODE=release account_service:latest
-
-dpostgres:
-	docker run --name panshee_database --network panshee-network -p 5432:5432 -e POSTGRES_PASSWORD=password -d postgres:latest
+	docker run --name email_service --network panshee-network -p 8080:8080 -e GIN_MODE=release account_service:latest
 
 server:
 	go run .

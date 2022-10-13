@@ -39,7 +39,7 @@ func (s *Server) RegisterUser(ctx context.Context, req *pb.RegisterUserRequest) 
 	//sending email
 	_, err = s.services.EmailService.SendEmail(context.Background(), &emailPb.SendEmailRequest{
 		Email: &emailPb.Email{
-			To:      "hudyweas@gmail.com",
+			To:      createdUser.Email,
 			Subject: "Zalozenie konta",
 			Message: "Brawo",
 		},

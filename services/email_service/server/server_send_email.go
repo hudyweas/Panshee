@@ -13,6 +13,9 @@ func (s *Server) SendEmail(ctx context.Context,req *pb.SendEmailRequest) (*pb.Se
 		fmt.Println(err)
 	}
 
+	fmt.Println(req.GetEmail())
+	fmt.Println("Send")
+
 	res := &pb.SendEmailResponse{
 		Email: &pb.Email{},
 	}
