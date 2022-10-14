@@ -4,10 +4,11 @@ import (
 	"context"
 	"fmt"
 
+	emailPb "github.com/hudyweas/panshee/libs/pbs/email_service/pb"
+
 	"github.com/hudyweas/panshee/services/account_service/api/panshee/v1/pb"
 	"github.com/hudyweas/panshee/services/account_service/util"
 	val "github.com/hudyweas/panshee/services/account_service/validators"
-	emailPb "github.com/hudyweas/panshee/services/email_service/api/panshee/v1/pb"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

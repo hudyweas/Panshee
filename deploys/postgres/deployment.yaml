@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: panshee-postgres-deployment
+    labels:
+        app: panshee-postgres
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: panshee-postgres
+    template:
+        metadata:
+            labels:
+                app: panshee-postgres
+        spec:
+            containers:
+                - name: panshee-postgres
+                  image: postgres:14-alpine
+                  ports:
+                      - containerPort: 5432
+                  env:
+                      - name: PANSHEE_ACCOUNT_SERVICE_DB_USER
+                        valueFrom:
+                            secretKeyRef:
+                                name: panshee-postgres-secret
+                                key: panshee-postgres-root-username
+                      - name: PANSHEE_ACCOUNT_SERVICE_DB_PASSWORD
+                        valueFrom:
+                            secretKeyRef:
+                                name: panshee-postgres-secret
+                                key: panshee-postgres-root-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: panshee-postgres-service
+spec:
+    selector:
+        app: panshee-postgres
+    ports:
+        - protocol: TCP
+          port: 5432
+          targetPort: 5432
