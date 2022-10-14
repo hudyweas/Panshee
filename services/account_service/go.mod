@@ -52,7 +52,3 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
 	github.com/o1egl/paseto v1.0.0
 )
-
-require github.com/hudyweas/panshee/libs/pbs/email_service/pb v0.0.0
-
-replace github.com/hudyweas/panshee/libs/pbs/email_service/pb v0.0.0 => ../../libs/pbs/email_service/pb

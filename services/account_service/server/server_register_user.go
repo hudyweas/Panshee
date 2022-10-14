@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	emailPb "github.com/hudyweas/panshee/libs/pbs/email_service/pb"
+	emailPb "github.com/hudyweas/panshee/services/account_service/imported/email_service/pb"
 
 	"github.com/hudyweas/panshee/services/account_service/api/panshee/v1/pb"
 	"github.com/hudyweas/panshee/services/account_service/util"

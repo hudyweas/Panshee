@@ -1,0 +1,81 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "panshee/services/email_service",
+    "version": "1.0",
+    "contact": {
+      "name": "Jakub Hudziak",
+      "url": "https://github.com/hudyweas/",
+      "email": "hudyweas@gmail.com"
+    }
+  },
+  "tags": [
+    {
+      "name": "PansheeEmailService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {},
+  "definitions": {
+    "protoEmail": {
+      "type": "object",
+      "properties": {
+        "to": {
+          "type": "string",
+          "title": "Email of the receiver"
+        },
+        "subject": {
+          "type": "string",
+          "title": "Subject of the email"
+        },
+        "message": {
+          "type": "string",
+          "title": "Message of the email"
+        }
+      },
+      "title": "A representation of a Email"
+    },
+    "protoSendEmailResponse": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "$ref": "#/definitions/protoEmail",
+          "title": "Email sent"
+        }
+      },
+      "title": "A representation of a Send Email Reponse"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

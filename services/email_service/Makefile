@@ -15,10 +15,11 @@ proto:
 	--grpc-gateway_out=api/panshee/v1/pb \
 	--openapiv2_out=doc/swagger --openapiv2_opt=allow_merge=true,merge_file_name=account_service \
 	./api/panshee/v1/proto/*.proto
-	rm -f libs/pbs/email_service/pb
-	cp api/panshee/v1/pb/*.go ../../libs/pbs/email_service/pb
 
 linter:
 	api-linter -I api/panshee/v1/proto/*.proto -o linter
+
+docker:
+	docker build -t hudyweas/panshee-email-service:latest .
 
 .PHONY: proto server linter

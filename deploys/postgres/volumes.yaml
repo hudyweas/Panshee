@@ -1,0 +1,29 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+    name: postgres-pv-volume
+    labels:
+        type: local
+        app: postgres
+spec:
+    capacity:
+        storage: 100Mi
+    accessModes:
+        - ReadWriteOnce
+    volumeMode: Filesystem
+    hostPath:
+        path: "/mnt/data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: postgres-pv-claim
+    labels:
+        app: postgres
+spec:
+    accessModes:
+        - ReadWriteOnce
+    volumeMode: Filesystem
+    resources:
+        requests:
+            storage: 100Mi

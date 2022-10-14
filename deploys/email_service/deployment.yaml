@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: panshee-email-deployment
+    labels:
+        app: panshee-email
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: panshee-email
+    template:
+        metadata:
+            labels:
+                app: panshee-email
+        spec:
+            containers:
+                - name: panshee-email
+                  image: hudyweas/panshee-email-service:latest
+                  ports:
+                      - containerPort: 8080
+                  env:
+                      - name: PANSHEE_EMAIL_SERVICE_GRPC_ADDRESS
+                        value: 0.0.0.0:50052
+                      - name: PANSHEE_EMAIL_SERVICE_EMAIL_ADDRESS
+                        value: panshee.service@gmail.com
+                      - name: PANSHEE_EMAIL_SERVICE_EMAIL_SERVER
+                        value: smtp.gmail.com:587
+                      - name: PANSHEE_ACCOUNT_SERVICE_DB_USER
+                        valueFrom:
+                            secretKeyRef:
+                                name: panshee-email-secret
+                                key: panshee-email-password
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: panshee-email-service
+spec:
+    selector:
+        app: panshee-email
+    type: LoadBalancer
+    ports:
+        - protocol: TCP
+          port: 8081
+          targetPort: 8080

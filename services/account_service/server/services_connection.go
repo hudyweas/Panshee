@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/hudyweas/panshee/libs/pbs/email_service/pb"
 	"github.com/hudyweas/panshee/services/account_service/config"
+	"github.com/hudyweas/panshee/services/account_service/imported/email_service/pb"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"

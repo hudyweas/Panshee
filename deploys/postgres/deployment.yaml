@@ -1,10 +1,11 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
     name: panshee-postgres-deployment
     labels:
         app: panshee-postgres
 spec:
+    serviceName: panshee-postgres-service
     replicas: 1
     selector:
         matchLabels:
@@ -30,6 +31,19 @@ spec:
                             secretKeyRef:
                                 name: panshee-postgres-secret
                                 key: panshee-postgres-root-password
+                      - name: POSTGRES_PASSWORD
+                        valueFrom:
+                            secretKeyRef:
+                                name: panshee-postgres-secret
+                                key: panshee-postgres-database-password
+                  volumeMounts:
+                      - mountPath: /var/lib/postgresql/data
+                        name: postgredb
+            volumes:
+                - name: postgredb
+                  persistentVolumeClaim:
+                      claimName: postgres-pv-claim
+
 ---
 apiVersion: v1
 kind: Service
