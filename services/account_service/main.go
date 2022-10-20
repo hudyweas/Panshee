@@ -5,9 +5,10 @@ import (
 	"embed"
 	"fmt"
 	"io/fs"
-	"log"
 	"net"
 	"net/http"
+
+	"github.com/sirupsen/logrus"
 
 	"github.com/go-pg/pg/v10"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
@@ -27,8 +28,14 @@ var(
 	res embed.FS
 )
 
+var log = logrus.New()
+
 func main() {
 	errChan := make(chan error, 1)
+
+	log.SetFormatter(&logrus.TextFormatter{
+		ForceColors: true,
+	})
 
 	//shutting down microservis
 	go func(){
@@ -38,36 +45,42 @@ func main() {
 			close(errChan)
 		}()
 
-		log.Fatal(err)
+		log.Fatal("Closing microservice %s: ", err.Error())
 	}()
 
-	config, err := config.LoadConfigFromFile("../../.env")
+	config, err := config.LoadConfigFromFile(".env", log)
 	if err != nil {
 		errChan <- fmt.Errorf("cannot load config: %s", err)
 	}
 
-	db := database.Connect(pg.Options{
+	db, err := database.Connect(pg.Options{
 		Addr:     config.DB_HOST + ":" + config.DB_PORT,
 		User:     config.DB_USER,
 		Password: config.DB_PASSWORD,
 		Database: config.DB_DBNAME,
 	})
+	if err != nil{
+		errChan <- err
+	}
 
 	if err := db.CheckConnection(); err != nil{
 		errChan <- err
 	}
+
+	log.Info("Connected to database")
 
 	go runGrpcServer(config, db, errChan)
 	runGatewayServer(config, db, errChan)
 }
 
 func runGrpcServer(config config.Config, db database.Database, errors chan error){
-	server := server.NewServer(config, db)
+	server := server.NewServer(config, db, log)
 
 	grpcServer := grpc.NewServer(
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
-				server.AuthUnaryServerInterceptor(),
-				server.MetadataUnaryServerInterceptor(),
+			server.GrpcLoggerInterceptor(),
+			server.AuthUnaryServerInterceptor(),
+			server.MetadataUnaryServerInterceptor(),
 		)),
 	)
 
@@ -79,7 +92,7 @@ func runGrpcServer(config config.Config, db database.Database, errors chan error
 		errors <- fmt.Errorf("cannot create listener: %s", err)
 	}
 
-	log.Print("started gRPC server at ", listener.Addr().String())
+	log.Infof("started gRPC server at %s", listener.Addr().String())
 	err = grpcServer.Serve(listener)
 	if err != nil{
 		errors <- fmt.Errorf("cannot create gRPC server: %s", err)
@@ -112,7 +125,7 @@ func runGatewayServer(config config.Config, db database.Database, errors chan er
 	//creating documentation site
 	fs, err := fs.Sub(res, "doc/swagger")
     if err != nil {
-        log.Fatal(err)
+        log.Error("Cannot create documentation site")
     }
 	fileServer := http.FileServer(http.FS(fs))
 	mux.Handle("/swagger/", http.StripPrefix("/swagger/", fileServer))
@@ -123,7 +136,7 @@ func runGatewayServer(config config.Config, db database.Database, errors chan er
 		errors <- fmt.Errorf("cannot create lisener: %s", err)
 	}
 
-	log.Print("started HTTTP gateway server at ", listener.Addr().String())
+	log.Infof("started HTTTP gateway server at %s", listener.Addr().String())
 	err = http.Serve(listener, mux)
 	if err != nil{
 		errors <- fmt.Errorf("cannot create HTTTP gateway server: %s", err)

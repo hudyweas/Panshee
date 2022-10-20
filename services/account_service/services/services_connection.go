@@ -1,4 +1,4 @@
-package server
+package services
 
 import (
 	"github.com/hudyweas/panshee/services/account_service/config"
@@ -13,7 +13,7 @@ type Services struct{
 }
 
 func ConnectServices(config config.Config) (Services, error){
-	emailService, err := connectEmailService()
+	emailService, err := connectEmailService(config.EMAIL_SERVICE_GRPC_ADDRESS)
 	if err != nil {
 		return Services{}, err
 	}
@@ -25,9 +25,9 @@ func ConnectServices(config config.Config) (Services, error){
 	return *services, nil
 }
 
-func connectEmailService() (pb.PansheeEmailServiceClient, error) {
+func connectEmailService(address string) (pb.PansheeEmailServiceClient, error) {
 	dialOptions := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
-	conn, err := grpc.Dial("0.0.0.0:50052", dialOptions...)
+	conn, err := grpc.Dial(address, dialOptions...)
 	if err != nil {
 		return nil, err
 	}

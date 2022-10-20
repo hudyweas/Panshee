@@ -18,15 +18,15 @@ spec:
                 - name: panshee-email
                   image: hudyweas/panshee-email-service:latest
                   ports:
-                      - containerPort: 8080
+                      - containerPort: 3000
                   env:
                       - name: PANSHEE_EMAIL_SERVICE_GRPC_ADDRESS
-                        value: 0.0.0.0:50052
+                        value: 0.0.0.0:3000
                       - name: PANSHEE_EMAIL_SERVICE_EMAIL_ADDRESS
                         value: panshee.service@gmail.com
                       - name: PANSHEE_EMAIL_SERVICE_EMAIL_SERVER
                         value: smtp.gmail.com:587
-                      - name: PANSHEE_ACCOUNT_SERVICE_DB_USER
+                      - name: PANSHEE_EMAIL_SERVICE_EMAIL_PASSWORD
                         valueFrom:
                             secretKeyRef:
                                 name: panshee-email-secret
@@ -41,7 +41,8 @@ spec:
     selector:
         app: panshee-email
     type: LoadBalancer
+    clusterIP: 10.8.2.1
     ports:
         - protocol: TCP
-          port: 8081
-          targetPort: 8080
+          port: 3000
+          targetPort: 3000

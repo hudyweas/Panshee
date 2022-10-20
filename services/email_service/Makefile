@@ -20,6 +20,8 @@ linter:
 	api-linter -I api/panshee/v1/proto/*.proto -o linter
 
 docker:
+	docker image rm hudyweas/panshee-email-service:latest
 	docker build -t hudyweas/panshee-email-service:latest .
+	docker push hudyweas/panshee-email-service:latest
 
 .PHONY: proto server linter

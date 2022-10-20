@@ -7,15 +7,13 @@ import (
 	"github.com/go-pg/pg/v10"
 )
 
-func Connect(config pg.Options) Database {
+func Connect(config pg.Options) (Database, error) {
 	db := pg.Connect(&config)
 	if err:= db.Ping(context.Background()); err != nil{
-		fmt.Println(err)
-	}else{
-		fmt.Println("Connected to database")
+		return &data{}, fmt.Errorf("No connection with database: %s", err.Error())
 	}
 
-	return &data{db}
+	return &data{db}, nil
 }
 
 func (db *data) CheckConnection() error {

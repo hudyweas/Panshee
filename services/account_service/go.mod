@@ -24,6 +24,8 @@ require (
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
+	github.com/mattn/go-colorable v0.1.12 // indirect
+	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
@@ -51,4 +53,6 @@ require (
 	github.com/go-pg/pg/v10 v10.10.7
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
 	github.com/o1egl/paseto v1.0.0
+	github.com/rs/zerolog v1.28.0
+	github.com/sirupsen/logrus v1.9.0
 )

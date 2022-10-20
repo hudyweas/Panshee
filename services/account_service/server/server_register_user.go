@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"fmt"
 
 	emailPb "github.com/hudyweas/panshee/services/account_service/imported/email_service/pb"
 
@@ -46,7 +45,7 @@ func (s *Server) RegisterUser(ctx context.Context, req *pb.RegisterUserRequest) 
 		},
 	})
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
 
 	//creating response

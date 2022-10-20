@@ -4,7 +4,9 @@ import (
 	"github.com/hudyweas/panshee/services/account_service/api/panshee/v1/pb"
 	"github.com/hudyweas/panshee/services/account_service/config"
 	"github.com/hudyweas/panshee/services/account_service/database"
+	"github.com/hudyweas/panshee/services/account_service/services"
 	"github.com/hudyweas/panshee/services/account_service/token"
+	"github.com/sirupsen/logrus"
 )
 
 type Server struct {
@@ -13,28 +15,38 @@ type Server struct {
 	db             database.Database
 	config         config.Config
 	tokenGenerator token.TokenGenerator
+	log            *logrus.Logger
 
-	services Services
+	services services.Services
 }
 
-func NewServer(config config.Config, db database.Database) (s *Server) {
+func NewServer(config config.Config, db database.Database, log *logrus.Logger) (s *Server) {
+
 	tokenGenerator, err := token.NewTokenGenerator(config.TOKEN_KEY)
 	if err != nil {
-		panic(err)
+		log.Panic(err)
 	}
 
-	services, err := ConnectServices(config)
+	services, err := services.ConnectServices(config)
 	if err != nil {
-		panic(err)
+		log.Panic(err)
 	}
+
+	log.Info("connected to Email Service")
 
 	s = &Server{
 		db:             db,
 		config:         config,
 		tokenGenerator: tokenGenerator,
+		log: log,
 
 		services: services,
 	}
+
+	s.log.SetFormatter(&logrus.TextFormatter{
+		ForceColors: true,
+	})
+
 
 	return
 }
