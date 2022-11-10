@@ -11,6 +11,7 @@ import (
 
 	"github.com/hudyweas/panshee/services/email_service/api/panshee/v1/pb"
 	"github.com/hudyweas/panshee/services/email_service/config"
+	"github.com/hudyweas/panshee/services/email_service/internal/interceptors"
 	"github.com/hudyweas/panshee/services/email_service/server"
 )
 
@@ -34,7 +35,7 @@ func main() {
 		log.Fatal("Closing microservice %s: ", err.Error())
 	}()
 
-	config, err := config.LoadConfigFromFile(".env", log)
+	config, err := config.LoadConfigFromFile(".env")
 	if err != nil {
 		errChan <- fmt.Errorf("cannot load config: %s", err)
 	}
@@ -45,7 +46,7 @@ func main() {
 func runGrpcServer(config config.Config, errors chan error) {
 	server := server.NewServer(config, log)
 
-	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(server.GrpcLoggerInterceptor()))
+	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(interceptors.GrpcLoggerInterceptor(log)))
 
 	pb.RegisterPansheeEmailServiceServer(grpcServer, server)
 	reflection.Register(grpcServer)

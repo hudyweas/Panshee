@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package api.panshee.v1.proto;
+
+import "google/api/field_behavior.proto";
+
+import "panshee/v1/proto/token.proto";
+
+option java_package = "api.panshee.v1.proto";
+option java_multiple_files = true;
+option java_outer_classname = "SessionProto";
+
+option go_package = ".;pb";
+
+//Session struct
+message Session {
+    // Session id
+    string id = 1;
+    // Id of user who owns session
+    string user_id = 2;
+    // Refresh token for a session
+    Token refresh_token = 3;
+    // User agent
+    string user_agent = 4;
+    // Client ip
+    string client_ip = 5;
+    // Is session blocked
+    bool is_blocked = 6;
+}
+
+// A request for getting a session
+message GetSessionRequest {
+    // session id
+    string session_id = 1 [(google.api.field_behavior) = REQUIRED];
+}

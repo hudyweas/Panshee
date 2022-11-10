@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package api.panshee.v1.proto;
+
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/api/client.proto";
+import "google/api/annotations.proto";
+
+import "panshee/v1/proto/api_user.proto";
+import "panshee/v1/proto/api_token.proto";
+
+option go_package = ".;pb";
+
+option java_package = "api.panshee.v1.proto";
+option java_multiple_files = true;
+option java_outer_classname = "ApiServiceProto";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+    info: {
+      title: "Panshee_api_service";
+      version: "1.0";
+      contact: {
+        name: "Jakub Hudziak";
+        url: "https://github.com/hudyweas/";
+        email: "jakub.k.hudziak@gmail.com";
+      };
+    };
+};
+
+// Main service who user connect with
+// Used for logic and hiding other microservices from user
+service ApiService {
+    // Function to ad user to database
+    // (-- api-linter: core::0133::http-body=disabled
+    //     aip.dev/not-precedent: Password needs to be in body. --)
+    // (-- api-linter: core::0133::method-signature=disabled
+    //     aip.dev/not-precedent: Password is a secret. --)
+    rpc CreateUser(CreateUserRequest) returns (User){
+        option (google.api.http) = {
+            post: "/v1/{parent=user/*}"
+            body: "*"
+        };
+
+        option (google.api.method_signature) = "parent,user,password";
+    }
+
+    // Function to login user
+    rpc LoginUser(LoginUserRequest) returns (LoginUserResponse){
+        option (google.api.http) = {
+            post: "/v1/user:login"
+            body: "*"
+        };
+
+        option (google.api.method_signature) = "email,password";
+    }
+
+    // Function to get user from database
+    rpc GetUser(GetUserRequest) returns (User){
+        option (google.api.http) = {
+            get: "/v1/{name=user/*}"
+        };
+
+        option (google.api.method_signature) = "name";
+    }
+
+    // Function to refresh acces token from refresh token
+    rpc RefreshAccessToken(RefreshAccessTokenDTORequest) returns (RefreshAccessTokenDTOResponse){
+        option (google.api.http) = {
+            post: "/v1/{parent=user/*}/token:refresh"
+            body: "*"
+        };
+
+        option (google.api.method_signature) = "parent,refresh_token";
+    }
+}

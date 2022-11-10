@@ -5,21 +5,31 @@ import (
 	"fmt"
 
 	"github.com/hudyweas/panshee/services/email_service/api/panshee/v1/pb"
+	val "github.com/hudyweas/panshee/services/email_service/internal/validators"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func (s *Server) SendEmail(ctx context.Context,req *pb.SendEmailRequest) (*pb.SendEmailResponse, error) {
-	s.log.Info("Received request to send email")
+	if validationErrors := validateSendEmailRequest(req); len(validationErrors) > 0{
+		return nil, status.Errorf(codes.InvalidArgument, validationErrors)
+	}
 
 	err := s.emailSender.Send(*req.GetEmail())
 	if err != nil {
 		return nil, fmt.Errorf("Cannot send email: %s", err)
 	}
-	s.log.Infof("Email send to: ", req.Email.GetTo())
 
 	res := &pb.SendEmailResponse{
-		Email: &pb.Email{},
+		Email: req.GetEmail(),
+	}
+	return res, nil
+}
+
+func validateSendEmailRequest(req *pb.SendEmailRequest) (errors string){
+	if err := val.ValidateEmail(req.Email.GetTo()); err != nil{
+		errors += "invalid email of the receiver"
 	}
 
-	s.log.Info("Sending response")
-	return res, nil
+	return
 }

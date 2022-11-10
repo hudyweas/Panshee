@@ -1,0 +1,55 @@
+// (-- api-linter: core::0191::proto-package=disabled
+//     aip.dev/not-precedent: We need to do this because reasons. --)
+syntax = "proto3";
+
+package api.panshee.v1.proto;
+
+import "protoc-gen-openapiv2/options/annotations.proto";
+// import "google/api/empty.proto";
+
+import "panshee/v1/proto/token.proto";
+import "panshee/v1/proto/auth.proto";
+import "panshee/v1/proto/user_password.proto";
+
+option java_package = "api.panshee.v1.proto";
+option java_multiple_files = true;
+option java_outer_classname = "AuthServiceProto";
+
+option go_package = ".;pb";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+    info: {
+      title: "Panshee_api_service";
+      version: "1.0";
+      contact: {
+        name: "Jakub Hudziak";
+        url: "https://github.com/hudyweas/";
+        email: "jakub.k.hudziak@gmail.com";
+      };
+    };
+};
+
+// Service for user authentication, session and password storing
+service AuthService {
+  //TODO:
+  // // Create to get a session from database
+  // rpc GetSession(GetSessionRequest) returns (Session) {}
+
+  // Function to add a password to the specific user
+  rpc CreateUserPassword(CreateUserPasswordRequest) returns (Empty) {}
+  //TODO:
+  // // Function to update a password of the specific user
+  // rpc UpdateUserPassword(UpdateUserPasswordRequest) returns (Empty) {}
+  // // Fcuntion to check if password is correct for specific user
+  // rpc ValidateUserPassword(ValidateUserPasswordRequest) returns (ValidateUserPasswordResponse) {}
+
+  // Returns true if access token is valid. False otherwise
+  rpc ValidateAccessToken(ValidateAccessTokenRequest) returns (ValidateAccessTokenResponse) {}
+  // Function to refresh access token from refresh token
+  rpc RefreshAccessToken(RefreshAccessTokenRequest) returns (RefreshAccessTokenResponse){}
+
+  //authorize user login
+  rpc AuthLogin(AuthLoginRequest) returns (AuthLoginResponse) {}
+}
+
+message Empty{}

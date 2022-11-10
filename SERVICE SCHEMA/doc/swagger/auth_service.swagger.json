@@ -1,0 +1,424 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Panshee_api_service",
+        "version": "1.0",
+        "contact": {
+            "name": "Jakub Hudziak",
+            "url": "https://github.com/hudyweas/",
+            "email": "jakub.k.hudziak@gmail.com"
+        }
+    },
+    "tags": [
+        {
+            "name": "AuthService"
+        }
+    ],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "paths": {
+        "/v1/{name}": {
+            "get": {
+                "summary": "Create to get a session from database",
+                "operationId": "AuthService_GetSession",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/protoSession"
+                        }
+                    },
+                    "default": {
+                        "description": "An unexpected error response.",
+                        "schema": {
+                            "$ref": "#/definitions/rpcStatus"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "name",
+                        "description": "session id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "pattern": "user/[^/]+/session/[^/]+"
+                    }
+                ],
+                "tags": ["AuthService"]
+            }
+        },
+        "/v1/{parent_1}": {
+            "post": {
+                "summary": "Fcuntion to check if password is correct for specific user",
+                "operationId": "AuthService_ValidateUserPassword",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/protoValidateUserPasswordResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "An unexpected error response.",
+                        "schema": {
+                            "$ref": "#/definitions/rpcStatus"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "parent_1",
+                        "description": "parent",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "pattern": "user/[^/]+/password/[^/]+"
+                    },
+                    {
+                        "name": "userPassword",
+                        "description": "user's password",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/protoUserPassword"
+                        }
+                    }
+                ],
+                "tags": ["AuthService"]
+            }
+        },
+        "/v1/{parent}": {
+            "post": {
+                "summary": "Function to create new session",
+                "operationId": "AuthService_CreateSession",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/protoSession"
+                        }
+                    },
+                    "default": {
+                        "description": "An unexpected error response.",
+                        "schema": {
+                            "$ref": "#/definitions/rpcStatus"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "parent",
+                        "description": "parent",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "pattern": "user/[^/]+/session"
+                    },
+                    {
+                        "name": "session",
+                        "description": "Session to create",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/protoSession"
+                        }
+                    }
+                ],
+                "tags": ["AuthService"]
+            },
+            "patch": {
+                "summary": "Function to update a password of the specific user\n(-- api-linter: core::0134::response-message-name=disabled\n    aip.dev/not-precedent: Password is a secret. --)",
+                "operationId": "AuthService_UpdateUserPassword",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {}
+                        }
+                    },
+                    "default": {
+                        "description": "An unexpected error response.",
+                        "schema": {
+                            "$ref": "#/definitions/rpcStatus"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "parent",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "pattern": "user/[^/]+/password/[^/]+"
+                    },
+                    {
+                        "name": "userPassword",
+                        "description": "password of the user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/protoUserPassword"
+                        }
+                    },
+                    {
+                        "name": "updateMask",
+                        "description": "update mask",
+                        "in": "query",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": ["AuthService"]
+            }
+        },
+        "/v1/{parent}/password": {
+            "post": {
+                "summary": "Function to add a password to the specific user\n(-- api-linter: core::0133::response-message-name=disabled\n    aip.dev/not-precedent: Password is a secret. --)",
+                "operationId": "AuthService_CreateUserPassword",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {}
+                        }
+                    },
+                    "default": {
+                        "description": "An unexpected error response.",
+                        "schema": {
+                            "$ref": "#/definitions/rpcStatus"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "parent",
+                        "description": "parent",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "pattern": "user/[^/]+"
+                    },
+                    {
+                        "name": "userPassword",
+                        "description": "password of the user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/protoUserPassword"
+                        }
+                    }
+                ],
+                "tags": ["AuthService"]
+            }
+        },
+        "/v1/{parent}/token:refresh": {
+            "post": {
+                "summary": "Function to refresh access token from refresh token",
+                "operationId": "AuthService_RefreshAccessToken",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/protoRefreshAccessTokenResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "An unexpected error response.",
+                        "schema": {
+                            "$ref": "#/definitions/rpcStatus"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "parent",
+                        "description": "id of the user to who wants to refresh token",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "pattern": "user/[^/]+"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "refreshToken": {
+                                    "$ref": "#/definitions/protoToken",
+                                    "title": "Refresh token used to refresh access token"
+                                }
+                            },
+                            "title": "A representation of a request for refreshing access token"
+                        }
+                    }
+                ],
+                "tags": ["AuthService"]
+            }
+        },
+        "/v1/{parent}/token:validate": {
+            "post": {
+                "operationId": "AuthService_ValidateAccessToken",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/protoValidateAccessTokenResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "An unexpected error response.",
+                        "schema": {
+                            "$ref": "#/definitions/rpcStatus"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "parent",
+                        "description": "id of the user to validate token",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "pattern": "user/[^/]+"
+                    },
+                    {
+                        "name": "accessToken",
+                        "description": "Refresh token used to refresh access token",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/protoToken"
+                        }
+                    }
+                ],
+                "tags": ["AuthService"]
+            }
+        }
+    },
+    "definitions": {
+        "protoRefreshAccessTokenResponse": {
+            "type": "object",
+            "properties": {
+                "accessToken": {
+                    "$ref": "#/definitions/protoToken",
+                    "title": "Access token returning to user"
+                }
+            },
+            "title": "Response with new access_token"
+        },
+        "protoSession": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "title": "Session id"
+                },
+                "userId": {
+                    "type": "string",
+                    "title": "Id of user who owns session"
+                },
+                "userEmail": {
+                    "type": "string",
+                    "title": "Email of user who ows session"
+                },
+                "refreshToken": {
+                    "$ref": "#/definitions/protoToken",
+                    "title": "Refresh token for a session"
+                },
+                "userAgent": {
+                    "type": "string",
+                    "title": "User agent"
+                },
+                "clientIp": {
+                    "type": "string",
+                    "title": "Client ip"
+                },
+                "isBlocked": {
+                    "type": "boolean",
+                    "title": "Is session blocked"
+                }
+            },
+            "title": "Session struct"
+        },
+        "protoToken": {
+            "type": "object",
+            "properties": {
+                "value": {
+                    "type": "string",
+                    "title": "Token string"
+                },
+                "expirationTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "Expiration time of the token"
+                }
+            },
+            "title": "Structure of a token"
+        },
+        "protoUserPassword": {
+            "type": "object",
+            "properties": {
+                "userId": {
+                    "type": "string",
+                    "title": "id of the user"
+                },
+                "password": {
+                    "type": "string",
+                    "title": "password of the user"
+                }
+            },
+            "title": "user password struct",
+            "required": ["userId", "password"]
+        },
+        "protoValidateAccessTokenResponse": {
+            "type": "object",
+            "properties": {
+                "validated": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "protoValidateUserPasswordResponse": {
+            "type": "object",
+            "properties": {
+                "validated": {
+                    "type": "boolean",
+                    "title": "true - password is correct\nfalse - password is incorrect"
+                }
+            },
+            "title": "response of the validation"
+        },
+        "protobufAny": {
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": {}
+        },
+        "rpcStatus": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/protobufAny"
+                    }
+                }
+            }
+        }
+    }
+}

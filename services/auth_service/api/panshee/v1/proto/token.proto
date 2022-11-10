@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package api.panshee.v1.proto;
+
+import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
+
+option java_package = "api.panshee.v1.proto";
+option java_multiple_files = true;
+option java_outer_classname = "TokenProto";
+
+option go_package = ".;pb";
+
+// Structure of a token
+message Token {
+    // Token string
+    string value = 1;
+    //Expiration time of the token
+    google.protobuf.Timestamp expiration_time = 2;
+}
+
+message Payload {
+    string ID = 1;
+    string UserID = 2;
+    google.protobuf.Timestamp CreatedAt = 3;
+    google.protobuf.Timestamp ExpiredAt = 4;
+}
+
+message ValidateAccessTokenRequest {
+    // Refresh token used to refresh access token
+    Token access_token = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ValidateAccessTokenResponse {
+    Payload access_token_payload = 1;
+}
+
+// A representation of a request for refreshing access token
+message RefreshAccessTokenRequest {
+    // id of the user
+    string user_id = 1 [(google.api.field_behavior) = REQUIRED];
+    // Refresh token used to refresh access token
+    Token refresh_token = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Response with new access_token
+message RefreshAccessTokenResponse {
+    // Access token returning to user
+    Token access_token = 1;
+}

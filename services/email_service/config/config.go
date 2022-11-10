@@ -1,7 +1,6 @@
 package config
 
 import (
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
@@ -11,7 +10,7 @@ type Config struct {
 	EMAIL_PASSWORD string `mapstructure:"PANSHEE_EMAIL_SERVICE_EMAIL_PASSWORD"`
 }
 
-func LoadConfigFromFile(configFileName string, log *logrus.Logger) (config Config, err error) {
+func LoadConfigFromFile(configFileName string) (config Config, err error) {
 	viper.SetConfigFile(configFileName)
 
 	viper.AutomaticEnv()
@@ -25,16 +24,12 @@ func LoadConfigFromFile(configFileName string, log *logrus.Logger) (config Confi
 			EMAIL_PASSWORD: viper.GetString("EMAIL_PASSWORD"),
 		}
 
-		log.Info("config created from env")
-
 		err = nil
 
 		return
 	}
 
 	err = viper.Unmarshal(&config)
-
-	log.Info("config created from file")
 
 	return
 }

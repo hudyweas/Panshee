@@ -1,0 +1,12 @@
+go 1.19
+
+use (
+	./services/api_service
+	./services/auth_service
+	./services/email_service
+)
+
+replace (
+	github.com/hudyweas/panshee/services/auth_service/api/panshee/v1/pb v0.0.0 => ./services/auth_service
+	github.com/hudyweas/panshee/services/email_service/api/panshee/v1/pb v0.0.0 => ./services/email_service
+)

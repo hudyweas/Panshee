@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package api.panshee.v1.proto;
+
+import "google/api/field_behavior.proto";
+
+import "panshee/v1/proto/token.proto";
+
+option java_package = "api.panshee.v1.proto";
+option java_multiple_files = true;
+option java_outer_classname = "AuthProto";
+
+option go_package = ".;pb";
+
+message AuthLoginRequest {
+    // id of the user
+    string user_id = 1 [(google.api.field_behavior) = REQUIRED];
+    // password of the user
+    string password = 2 [(google.api.field_behavior) = REQUIRED];
+    // User agent
+    string user_agent = 3 [(google.api.field_behavior) = REQUIRED];
+    // Client ip
+    string client_ip = 4 [(google.api.field_behavior) = REQUIRED];
+}
+
+message AuthLoginResponse {
+    string session_id = 1;
+    Token access_token = 2;
+    Token refresh_token = 3;
+}
