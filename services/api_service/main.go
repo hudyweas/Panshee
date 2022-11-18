@@ -71,8 +71,6 @@ func main() {
 		errChan <- err
 	}
 
-	log.Info("Connected to database")
-
 	go runGrpcServer(config, db, errChan)
 	runGatewayServer(config, db, errChan)
 }

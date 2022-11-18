@@ -12,7 +12,7 @@ func (db *data) SessionSelectByID(id uuid.UUID) (*Session, error) {
 
 	session := &Session{}
 
-	err := db.Model(session).Where("session_id = ?", id).Select()
+	err := db.Model(session).Where("id = ?", id).Select()
 	if err != nil {
 		return session, e.DatabaseErrorWrapper(err)
 	}

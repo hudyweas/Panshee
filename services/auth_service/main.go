@@ -56,8 +56,6 @@ func main() {
 		errChan <- err
 	}
 
-	log.Info("Connected to database")
-
 	runGrpcServer(config, db, errChan)
 }
 

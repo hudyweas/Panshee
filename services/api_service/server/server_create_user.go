@@ -8,6 +8,7 @@ import (
 	emailPb "github.com/hudyweas/panshee/services/api_service/services/email_service/pb"
 
 	"github.com/hudyweas/panshee/services/api_service/api/panshee/v1/pb"
+	"github.com/hudyweas/panshee/services/api_service/api/panshee/v1/pb/converters"
 
 	val "github.com/hudyweas/panshee/services/api_service/internal/validators"
 	"google.golang.org/grpc/codes"
@@ -54,7 +55,7 @@ func (s *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb
 	}
 
 	//creating response
-	rsp := convertDbUserToPbUser(*createdUser)
+	rsp := converters.ConvertDbUserToPbUser(*createdUser)
 
 	return rsp, nil
 }

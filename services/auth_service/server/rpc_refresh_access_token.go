@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/hudyweas/panshee/services/auth_service/api/panshee/v1/pb"
 	"github.com/hudyweas/panshee/services/auth_service/api/panshee/v1/pb/converters"
@@ -15,6 +16,8 @@ func (s *Server) RefreshAccessToken(ctx context.Context, req *pb.RefreshAccessTo
 	if err != nil{
 		return nil, status.Errorf(codes.Unauthenticated, "invalid token")
 	}
+
+	fmt.Println(refreshTokenPayload)
 
 	if refreshTokenPayload.UserID.String() != req.GetUserId() {
 		return nil, status.Errorf(codes.PermissionDenied, "token owns to another user")

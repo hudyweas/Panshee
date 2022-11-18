@@ -7,6 +7,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	"github.com/hudyweas/panshee/services/api_service/api/panshee/v1/pb"
+	"github.com/hudyweas/panshee/services/api_service/api/panshee/v1/pb/converters"
 	e "github.com/hudyweas/panshee/services/api_service/errors"
 
 	"github.com/hudyweas/panshee/services/api_service/internal/contextData"
@@ -15,6 +16,11 @@ import (
 )
 
 func (s *Server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (*pb.LoginUserResponse, error) {
+	//checking request validation
+	if validationErrors := validateLoginUserRequest(req); len(validationErrors) > 0{
+		return nil, status.Errorf(codes.InvalidArgument, validationErrors)
+	}
+
 	user, err := s.db.UserSelectByEmail(req.GetEmail())
 	if err != nil {
 		if err.Error() == e.ErrNoDataInDatabase {
@@ -44,7 +50,7 @@ func (s *Server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (*pb.L
 			Value:          loginResponse.RefreshToken.Value,
 			ExpirationTime: loginResponse.RefreshToken.GetExpirationTime(),
 		},
-		User:         &pb.User{},
+		User:         converters.ConvertDbUserToPbUser(*user),
 	}
 
 	return rsp, nil

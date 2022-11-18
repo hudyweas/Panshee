@@ -1,4 +1,4 @@
-package server
+package converters
 
 import (
 	"github.com/hudyweas/panshee/services/api_service/api/panshee/v1/pb"
@@ -6,7 +6,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func convertDbUserToPbUser(user database.User) *pb.User {
+func ConvertDbUserToPbUser(user database.User) *pb.User {
 	return &pb.User{
 		Id:         user.ID.String(),
 		Email:      user.Email,
