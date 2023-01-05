@@ -4,6 +4,7 @@ use (
 	./services/api_service
 	./services/auth_service
 	./services/email_service
+	./services/wallet_service
 )
 
 replace (
