@@ -13,5 +13,18 @@ message GetWalletDataRequest {
 }
 
 message GetWalletDataResponse {
+    repeated string Wallet = 1;
+}
 
+message Wallet {
+    string address = 1;
+    repeated Currency tokens = 2;
+}
+
+message Currency {
+    string tokenName = 1;
+    string tokenSymbol = 2;
+    float amount = 3;
+    float priceUSC = 4;
+    float priceChangePercentage24h = 5;
 }
