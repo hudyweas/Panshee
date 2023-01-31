@@ -16,11 +16,11 @@ type Wallet struct {
 }
 
 type Currency struct {
-	TokenName 	  				string
-	TokenSymbol					string
-	Amount						float64
-	PriceUSD 					float64
-	PriceChangePercentage24h 	float64
+	TokenName                string
+	TokenSymbol              string
+	Amount                   float64
+	PriceUSD                 float64
+	PriceChangePercentage24h float64
 }
 
 func NewWalletFromBep20List(hash string, bep20list []bscscanapi.Bep20Trans) (w Wallet, err error) {
@@ -30,10 +30,10 @@ func NewWalletFromBep20List(hash string, bep20list []bscscanapi.Bep20Trans) (w W
 	return
 }
 
-func (w *Wallet) UpdateFromBep20ListTransaction(bep20list []bscscanapi.Bep20Trans) error{
+func (w *Wallet) UpdateFromBep20ListTransaction(bep20list []bscscanapi.Bep20Trans) error {
 	currencyMap := make(map[string]int)
 
-	for _, trans := range bep20list{
+	for _, trans := range bep20list {
 		id, ok := currencyMap[trans.TokenName]
 		if !ok {
 			id = len(w.Currency)
@@ -49,19 +49,19 @@ func (w *Wallet) UpdateFromBep20ListTransaction(bep20list []bscscanapi.Bep20Tran
 		}
 
 		transFloat, err := strconv.ParseFloat(trans.Value, 64)
-		if err != nil{
+		if err != nil {
 			return fmt.Errorf("error during converting result to float")
 		}
 		tokenDecimal, err := strconv.Atoi(trans.TokenDecimal)
-		if err != nil{
-			return fmt.Errorf("error during converting result to float")
+		if err != nil {
+			return fmt.Errorf("error during converting result to int")
 		}
 
 		transFloat /= math.Pow10(tokenDecimal)
 
 		if strings.EqualFold(trans.To, w.Address) {
 			w.Currency[id].Amount += transFloat
-		}else{
+		} else {
 			w.Currency[id].Amount -= transFloat
 		}
 	}
@@ -74,18 +74,18 @@ func (w *Wallet) SetUpTokenPrices() error {
 	currencyMap := make(map[string]int)
 
 	for i, c := range w.Currency {
-		tokens = append(tokens, c.TokenName)
-		currencyMap[c.TokenName] = i
+		tokens = append(tokens, c.TokenSymbol)
+		currencyMap[c.TokenSymbol] = i
 	}
 
-	prices, err := coingeckoapi.GetTokenPriceFromTokenList(tokens)
+	prices, err := coingeckoapi.GetTokenPriceFromTokenSymbolList(tokens)
 	if err != nil {
 		return err
 	}
 
 	for _, tokenPrice := range prices {
-		id := currencyMap[tokenPrice.Name]
-		if(w.Currency[id].TokenName == tokenPrice.Name){
+		id := currencyMap[strings.ToUpper(tokenPrice.Symbol)]
+		if strings.EqualFold(w.Currency[id].TokenSymbol, tokenPrice.Symbol) {
 			w.Currency[id].PriceUSD = tokenPrice.CurrentPrice
 			w.Currency[id].PriceChangePercentage24h = tokenPrice.PriceChangePercentage24h
 		}
@@ -94,7 +94,7 @@ func (w *Wallet) SetUpTokenPrices() error {
 	return nil
 }
 
-func (w *Wallet) ClearEmptyAndScamCurrency(){
+func (w *Wallet) ClearEmptyAndScamCurrency() {
 	noEmptyCurrency := *new([]Currency)
 
 	for _, c := range w.Currency {

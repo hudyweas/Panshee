@@ -2,22 +2,30 @@ syntax = "proto3";
 
 package api.panshee.v1.proto;
 
+
 option java_package = "api.panshee.v1.proto";
 option java_multiple_files = true;
 option java_outer_classname = "WalletProto";
 
 option go_package = ".;pb";
 
-message GetWalletDataRequest {
-    string walletAddress = 1;
+//TODO:
+
+message GetWalletDTODataRequest {
+    // id of the user to who wants to refresh token
+    string parent = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
-message Wallet {
+message GetWalletDTODataResponse {
+    repeated WalletDTO wallets = 1;
+}
+
+message WalletDTO {
     string address = 1;
-    repeated Currency tokens = 2;
+    repeated CurrencyDTO tokens = 2;
 }
 
-message Currency {
+message CurrencyDTO {
     string tokenName = 1;
     string tokenSymbol = 2;
     float amount = 3;

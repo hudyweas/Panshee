@@ -8,6 +8,7 @@ import "google/api/annotations.proto";
 
 import "panshee/v1/proto/api_user.proto";
 import "panshee/v1/proto/api_token.proto";
+import "panshee/v1/proto/api_wallet.proto";
 
 option go_package = ".;pb";
 
@@ -71,5 +72,14 @@ service ApiService {
         };
 
         option (google.api.method_signature) = "parent,refresh_token";
+    }
+
+    rpc GetWallets(GetWalletDTODataRequest) returns (GetWalletDTODataResponse){
+        option (google.api.http) = {
+            post: "/v1/{parent=user/*}/wallets"
+            body: "*"
+        };
+
+        option (google.api.method_signature) = "parent";
     }
 }

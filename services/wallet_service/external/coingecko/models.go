@@ -1,9 +1,5 @@
 package coingeckoapi
 
-type TokensPriceResponse struct {
-	Prices []TokenPrice `json:""`
-}
-
 type TokenPrice struct {
 	Id                                 string  `json:"id"`
 	Symbol                             string  `json:"symbol"`
@@ -29,7 +25,13 @@ type TokenPrice struct {
 	Atl                                float64 `json:"atl"`
 	AtlChangePercentage                float64 `json:"atl_change_percentage"`
 	AtlDate                            string  `json:"atl_date"`
-	Roi                                string  `json:"roi"`
+	Roi                                any     `json:"roi"`
 	LastUpdated                        string  `json:"last_updated"`
 	PriceChangePercentage24hInCurrency float64 `json:"price_change_percentage_24h_in_currency"`
+}
+
+type TokenID struct {
+	ID     string `json:"id"`
+	Symbol string `json:"symbol"`
+	Name   string `json:"name"`
 }

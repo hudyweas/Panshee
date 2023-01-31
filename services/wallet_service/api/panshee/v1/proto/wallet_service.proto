@@ -2,9 +2,9 @@ syntax = "proto3";
 
 package api.panshee.v1.proto;
 
-import "protoc-gen-openapiv2/options/annotations.proto";
+// import "protoc-gen-openapiv2/options/annotations.proto";
 
-import "panshee/v1/proto/wallet.proto";
+import "wallet.proto";
 
 option java_package = "api.panshee.v1.proto";
 option java_multiple_files = true;
@@ -12,18 +12,18 @@ option java_outer_classname = "WalletServiceProto";
 
 option go_package = ".;pb";
 
-option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
-    info: {
-      title: "panshee/services/wallet_service";
-      version: "1.0";
-      contact: {
-        name: "Jakub Hudziak";
-        url: "https://github.com/hudyweas/";
-        email: "hudyweas@gmail.com";
-      };
-    };
-};
+// option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+//     info: {
+//       title: "panshee/services/wallet_service";
+//       version: "1.0";
+//       contact: {
+//         name: "Jakub Hudziak";
+//         url: "https://github.com/hudyweas/";
+//         email: "hudyweas@gmail.com";
+//       };
+//     };
+// };
 
 service PansheeWalletService {
-    rpc GetWalletData(GetWalletDataRequest) returns (GetWalletDataResponse) {}
+    rpc GetWalletData(GetWalletDataRequest) returns (Wallet) {}
 }
