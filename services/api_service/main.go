@@ -8,6 +8,8 @@ import (
 	"net"
 	"net/http"
 
+	"github.com/rs/cors"
+
 	"github.com/sirupsen/logrus"
 
 	"github.com/hudyweas/panshee/services/api_service/api/panshee/v1/pb"
@@ -125,6 +127,16 @@ func runGatewayServer(config config.Config, db database.Database, errors chan er
 	mux := http.NewServeMux()
 	mux.Handle("/", grpcMux)
 
+	 co := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://*"},
+		AllowedMethods:   []string{"GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: true,
+		Debug:            false,
+	})
+
+	handler := co.Handler(mux)
+
 	//creating documentation site
 	fs, err := fs.Sub(res, "doc/swagger")
     if err != nil {
@@ -140,7 +152,7 @@ func runGatewayServer(config config.Config, db database.Database, errors chan er
 	}
 
 	log.Infof("started HTTTP gateway server at %s", listener.Addr().String())
-	err = http.Serve(listener, mux)
+	err = http.Serve(listener, handler)
 	if err != nil{
 		errors <- fmt.Errorf("cannot create HTTTP gateway server: %s", err)
 	}

@@ -38,7 +38,7 @@ service ApiService {
     //     aip.dev/not-precedent: Password is a secret. --)
     rpc CreateUser(CreateUserRequest) returns (User){
         option (google.api.http) = {
-            post: "/v1/{parent=user/*}"
+            post: "/v1/user"
             body: "*"
         };
 
@@ -74,10 +74,26 @@ service ApiService {
         option (google.api.method_signature) = "parent,refresh_token";
     }
 
-    rpc GetWallets(GetWalletDTODataRequest) returns (GetWalletDTODataResponse){
+    rpc CreateWallet(CreateWalletRequest) returns (WalletDTO) {
         option (google.api.http) = {
             post: "/v1/{parent=user/*}/wallets"
-            body: "*"
+            body: "wallet"
+        };
+
+        option (google.api.method_signature) = "parent";
+    }
+
+    rpc GetWallets(GetWalletDTODataRequest) returns (GetWalletDTODataResponse){
+        option (google.api.http) = {
+            get: "/v1/{parent=user/*/wallets/*}"
+        };
+
+        option (google.api.method_signature) = "parent";
+    }
+
+    rpc DeleteWallet(DeleteWalletRequest) returns (DeleteWalletResponse){
+        option (google.api.http) = {
+            delete: "/v1/{parent=user/*/wallets/*}"
         };
 
         option (google.api.method_signature) = "parent";

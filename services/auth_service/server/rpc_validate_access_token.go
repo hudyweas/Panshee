@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) ValidateAccessToken(ctx context.Context, req *pb.ValidateAccessTokenRequest) (*pb.ValidateAccessTokenResponse, error) {
-	accessTokenPayload, err := s.refreshTokenGenerator.VerifyToken(req.AccessToken.GetValue())
+	accessTokenPayload, err := s.accessTokenGenerator.VerifyToken(req.AccessToken.GetValue())
 	if err != nil {
 		return nil, fmt.Errorf("invalid token")
 	}

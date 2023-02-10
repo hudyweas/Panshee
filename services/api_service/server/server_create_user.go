@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"fmt"
 
 	authPb "github.com/hudyweas/panshee/services/api_service/services/auth_service/pb"
 	emailPb "github.com/hudyweas/panshee/services/api_service/services/email_service/pb"
@@ -62,7 +61,6 @@ func (s *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb
 
 func validateCreateUserRequest(req *pb.CreateUserRequest) (errors string){
 	//validating email from request
-	fmt.Print(req.User.GetEmail())
 	if err := val.ValidateEmail(req.User.GetEmail()); err != nil {
 		errors += "invalid email" + "\n"
 	}

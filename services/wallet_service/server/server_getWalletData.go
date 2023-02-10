@@ -34,6 +34,9 @@ func (s *Server) GetWalletData(ctx context.Context, req *pb.GetWalletDataRequest
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
+	if len(bep20list) == 0{
+		return nil, status.Errorf(codes.InvalidArgument, "no matching wallet for provided address: %s", req.GetWalletAddress())
+	}
 
 	w, err := wallet.NewWalletFromBep20List(req.GetWalletAddress(), bep20list)
 	if err != nil {

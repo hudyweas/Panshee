@@ -16,6 +16,7 @@ type Config struct {
 
 	EMAIL_SERVICE_GRPC_ADDRESS string `mapstructure:"PANSHEE_API_SERVICE_EMAIL_SERVICE_GRPC_ADDRESS"`
 	AUTH_SERVICE_GRPC_ADDRESS string `mapstructure:"PANSHEE_API_SERVICE_AUTH_SERVICE_GRPC_ADDRESS"`
+	WALLET_SERVICE_GRPC_ADDRESS string `mapstructure:"PANSHEE_API_SERVICE_WALLET_SERVICE_GRPC_ADDRESS"`
 }
 
 func LoadConfigFromFile(configFileName string) (config Config, err error) {

@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package api.panshee.v1.proto;
 
+import "google/api/field_behavior.proto";
 
 option java_package = "api.panshee.v1.proto";
 option java_multiple_files = true;
@@ -11,8 +12,23 @@ option go_package = ".;pb";
 
 //TODO:
 
+message CreateWalletRequest {
+    // id of the user to who wants to create new wallet
+    string  parent = 1 [(google.api.field_behavior) = REQUIRED];
+    WalletDTO wallet = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message DeleteWalletRequest {
+    // id of the user to who wants to delete his wallet
+    string parent = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message DeleteWalletResponse {
+    bool success = 1;
+}
+
 message GetWalletDTODataRequest {
-    // id of the user to who wants to refresh token
+    // id of the user to who wants to get his wallets
     string parent = 1 [(google.api.field_behavior) = REQUIRED];
 }
 

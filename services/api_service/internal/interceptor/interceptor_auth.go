@@ -21,6 +21,7 @@ func AuthUnaryServerInterceptor(services *services.Services) grpc.UnaryServerInt
 		path := strings.Replace(info.FullMethod, "/api.panshee.v1.proto.ApiService/", "", 1)
 		if path == "LoginUser" ||
 			path == "RefreshAccessToken" ||
+			path == "GetWallets" ||
 			path == "CreateUser" {
 			return handler(ctx, req)
 		}
@@ -51,7 +52,7 @@ func AuthUnaryServerInterceptor(services *services.Services) grpc.UnaryServerInt
 		authType := authHeader[0]
 		tokenString := authHeader[1]
 
-		if authType != "bearer" {
+		if strings.ToLower(authType) != "bearer" {
 			return nil, fmt.Errorf("invalid auth type")
 		}
 
