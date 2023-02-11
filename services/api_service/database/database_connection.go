@@ -1,20 +1,26 @@
 package database
 
 import (
-	"context"
+	"database/sql"
 	"fmt"
 
-	"github.com/go-pg/pg/v10"
+	"github.com/uptrace/bun"
+	"github.com/uptrace/bun/dialect/pgdialect"
+	"github.com/uptrace/bun/driver/pgdriver"
 )
 
-func Connect(config pg.Options) (Database, error) {
-	db := pg.Connect(&config)
+func Connect(address string, port string, username string, password string, database string) (Database){
+	dsn := fmt.Sprintf(`postgres://%s:%s@%s:%s/%s?sslmode=disable`, username, password, address, port, database)
 
-	return &data{db}, nil
+	sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(dsn)))
+
+	db := bun.NewDB(sqldb, pgdialect.New())
+
+	return &data{db}
 }
 
 func (db *data) CheckConnection() error {
-	if err:= db.DB.Ping(context.Background()); err != nil{
+	if err:= db.Ping(); err != nil{
 		return fmt.Errorf("No connection to database: %s", err)
 	}
 

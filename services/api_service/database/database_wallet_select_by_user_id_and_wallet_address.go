@@ -1,6 +1,8 @@
 package database
 
 import (
+	"context"
+
 	"github.com/google/uuid"
 	e "github.com/hudyweas/panshee/services/api_service/errors"
 )
@@ -11,8 +13,7 @@ func (db *data) WalletSelectByIDAndWalletAddress(user_id uuid.UUID, walletAddres
 	}
 
 	var walletAddresses []Wallet
-
-	err := db.Model(&walletAddresses).Where("user_id = ? AND wallet_address = ?", user_id, walletAddress).Select()
+	err := db.NewSelect().Model(&walletAddresses).Where("user_id = ? AND wallet_address = ?", user_id, walletAddress).Scan(context.Background())
 	if err != nil {
 		return &walletAddresses, e.DatabaseErrorWrapper(err)
 	}

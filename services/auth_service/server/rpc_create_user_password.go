@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/hudyweas/panshee/services/auth_service/api/panshee/v1/pb"
@@ -24,8 +23,6 @@ func (s *Server) CreateUserPassword(ctx context.Context, req *pb.CreateUserPassw
 	}else if err != nil{
 		return nil, err
 	}
-
-	fmt.Print(req.GetPassword())
 
 	hashedPassword, err := util.HashPassword(req.GetPassword())
 	if err != nil {

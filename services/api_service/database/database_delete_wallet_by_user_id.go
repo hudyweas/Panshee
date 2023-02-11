@@ -1,6 +1,7 @@
 package database
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/google/uuid"
@@ -12,12 +13,14 @@ func (db *data) DeleteWalletByIdAndWalletAddress(user_id uuid.UUID, walletAddres
 		return err
 	}
 
-	orm , err := db.Model(&Wallet{}).Where("user_id = ? AND wallet_address = ?", user_id, walletAddress).Delete()
+	res , err := db.NewDelete().Model(&Wallet{}).Where("user_id = ? AND wallet_address = ?", user_id, walletAddress).Exec(context.Background())
 	if err != nil {
 		return e.DatabaseErrorWrapper(err)
 	}
 
-	if orm.RowsAffected() == 0 {
+	rowsAffected, _ := res.RowsAffected()
+
+	if rowsAffected == 0 {
 		return fmt.Errorf("no matching wallet address for given user")
 	}
 

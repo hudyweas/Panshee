@@ -18,7 +18,6 @@ import (
 	"github.com/hudyweas/panshee/services/api_service/internal/interceptor"
 	"github.com/hudyweas/panshee/services/api_service/server"
 
-	"github.com/go-pg/pg/v10"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
@@ -57,19 +56,13 @@ func main() {
 		errChan <- fmt.Errorf("cannot load config: %s", err)
 	}
 
-	fmt.Print(config)
+	db := database.Connect(config.DB_HOST, config.DB_PORT, config.DB_USER, config.DB_PASSWORD, config.DB_DBNAME)
 
-	db, err := database.Connect(pg.Options{
-		Addr:     config.DB_HOST + ":" + config.DB_PORT,
-		User:     config.DB_USER,
-		Password: config.DB_PASSWORD,
-		Database: config.DB_DBNAME,
-	})
-	if err != nil{
+	if err := db.CheckConnection(); err != nil{
 		errChan <- err
 	}
 
-	if err := db.CheckConnection(); err != nil{
+	if err = db.Init(); err != nil{
 		errChan <- err
 	}
 

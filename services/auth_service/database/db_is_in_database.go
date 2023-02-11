@@ -7,7 +7,6 @@ import (
 
 func (db *data) IsUserPasswordInDatabaseByUserID(id uuid.UUID) (bool, error) {
 	_, err := db.UserPasswordSelectByUserID(id)
-
 	if err == nil{
 		return true, nil
 	}

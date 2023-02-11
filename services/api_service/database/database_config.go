@@ -3,12 +3,12 @@ package database
 import (
 	"time"
 
-	"github.com/go-pg/pg/v10"
 	"github.com/google/uuid"
+	"github.com/uptrace/bun"
 )
 
 type data struct {
-	*pg.DB
+	*bun.DB
 }
 
 type Database interface {
@@ -26,19 +26,24 @@ type Database interface {
 	//General
 	Close()
 	CheckConnection() error
+	Init() error
 }
 
 type User struct {
-	ID       uuid.UUID 	`json:"ID"`
-	Email    string 	`json:"email"`
-	Active   bool   	`json:"active"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	DeletedAt time.Time `json:"deleted_at"`
+	bun.BaseModel
+
+	ID       uuid.UUID 	`bun:"type:uuid,unique,notnull,default:gen_random_uuid()"`
+	Email    string 	`bun:",notnull"`
+	Active   bool   	`bun:"type:bool,default:true"`
+	CreatedAt time.Time `bun:",notnull,default:current_timestamp"`
+	UpdatedAt time.Time `bun:",notnull,default:current_timestamp"`
+	DeletedAt time.Time `bun:",notnull,default:current_timestamp"`
 }
 
 type Wallet struct {
-	ID 					int 		`json:"ID"`
-	WalletAddress    	string 		`json:"wallet_address"`
-	UserID       		uuid.UUID 	`json:"user_id"`
+	bun.BaseModel
+
+	ID 					int 		`bun:"type:integer"`
+	WalletAddress    	string 		`bun:",notnull"`
+	UserID       		uuid.UUID 	`bun:"type:uuid"`
 }

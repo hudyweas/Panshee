@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/hudyweas/panshee/services/auth_service/api/panshee/v1/pb"
@@ -29,8 +28,6 @@ func (s *Server) AuthLogin(ctx context.Context, req *pb.AuthLoginRequest) (*pb.A
 		}
 		return nil, err
 	}
-
-	fmt.Print(userPasswordFromDB.Password)
 
 	//checking password validation with hash from database
 	if err := val.ValidateHash(userPasswordFromDB.Password, req.GetPassword()); err != nil {

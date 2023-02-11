@@ -1,6 +1,8 @@
 package database
 
 import (
+	"context"
+
 	e "github.com/hudyweas/panshee/services/api_service/errors"
 )
 
@@ -12,7 +14,7 @@ func (db *data) UserCreate(email string) (*User, error) {
 	user := User{}
 	user.Email = email
 
-	_, err := db.Model(&user).Insert()
+	_, err := db.NewInsert().Model(&user).Exec(context.Background())
 
 	if err != nil {
 		return &user, e.DatabaseErrorWrapper(err)

@@ -7,7 +7,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	"github.com/go-pg/pg/v10"
 	"github.com/sirupsen/logrus"
 
 	"github.com/hudyweas/panshee/services/auth_service/api/panshee/v1/pb"
@@ -42,17 +41,13 @@ func main() {
 		errChan <- fmt.Errorf("cannot load config: %s", err)
 	}
 
-	db, err := database.Connect(pg.Options{
-		Addr:     config.DB_HOST + ":" + config.DB_PORT,
-		User:     config.DB_USER,
-		Password: config.DB_PASSWORD,
-		Database: config.DB_DBNAME,
-	})
-	if err != nil{
+	db := database.Connect(config.DB_HOST, config.DB_PORT, config.DB_USER, config.DB_PASSWORD, config.DB_DBNAME)
+
+	if err := db.CheckConnection(); err != nil{
 		errChan <- err
 	}
 
-	if err := db.CheckConnection(); err != nil{
+	if err = db.Init(); err != nil{
 		errChan <- err
 	}
 

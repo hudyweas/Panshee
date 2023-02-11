@@ -3,12 +3,12 @@ package database
 import (
 	"time"
 
-	"github.com/go-pg/pg/v10"
 	"github.com/google/uuid"
+	"github.com/uptrace/bun"
 )
 
 type data struct {
-	*pg.DB
+	*bun.DB
 }
 
 type Database interface {
@@ -24,20 +24,25 @@ type Database interface {
 	//General
 	Close()
 	CheckConnection() error
+	Init() error
 }
 
 type Session struct {
-	ID    uuid.UUID `json:"session_ID"`
-	UserID uuid.UUID `json:"user_id"`
-	RefreshToken string    `json:"refresh_token"`
-	ClientIp	string `json:"client_ip"`
-	UserAgent	string `json:"user_agent"`
-	IsBlocked    bool      `json:"is_blocked"`
-	ExpiresAt    time.Time `json:"expires_at"`
+	bun.BaseModel
+
+	ID    uuid.UUID 		`bun:"type:uuid,unique,notnull,default:gen_random_uuid()"`
+	UserID uuid.UUID 		`bun:"type:uuid,notnull"`
+	RefreshToken string    	`bun:",unique,notnull"`
+	ClientIp	string 		`bun:",notnull"`
+	UserAgent	string 		`bun:",notnull"`
+	IsBlocked    bool      	`bun:",notnull"`
+	ExpiresAt    time.Time 	`bun:",notnull"`
 }
 
 type UserPassword struct {
-	ID uuid.UUID     `json:"id:"`
-	UserID uuid.UUID `json:"user_id"`
-	Password string  `json:"password"`
+	bun.BaseModel
+
+	ID uuid.UUID     `bun:"type:uuid,unique,notnull,default:gen_random_uuid()"`
+	UserID uuid.UUID `bun:"type:uuid,notnull"`
+	Password string  `bun:",notnull"`
 }

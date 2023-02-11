@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/hudyweas/panshee/services/wallet_service/api/panshee/v1/pb"
 	"github.com/hudyweas/panshee/services/wallet_service/api/panshee/v1/pb/converters"
@@ -20,7 +19,6 @@ func (s *Server) GetWalletData(ctx context.Context, req *pb.GetWalletDataRequest
 	//TODO: implement bnb
 	bnbBalance, err := s.bsc.GetBnbBalanceFromAddress(req.GetWalletAddress())
 	if err != nil {
-		fmt.Println(err)
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
 

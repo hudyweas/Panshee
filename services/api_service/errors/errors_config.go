@@ -10,7 +10,7 @@ const (
 //TODO:
 func DatabaseErrorWrapper(err error) error{
 	switch err.Error(){
-	case "pg: no rows in result set":
+	case "sql: no rows in result set":
 		return fmt.Errorf(ErrNoDataInDatabase)
 	}
 

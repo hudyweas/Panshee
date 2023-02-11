@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	"github.com/google/uuid"
@@ -37,7 +36,6 @@ func (s *Server) GetWallets(ctx context.Context, req *pb.GetWalletDTODataRequest
 			}
 		}else{
 			dbWalletAddress, err := s.db.WalletSelectByID(userUUID)
-			fmt.Println(len(*dbWalletAddress))
 			if err != nil{
 				if err.Error() == e.ErrNoDataInDatabase {
 					return nil, status.Errorf(codes.NotFound, "no wallet addresses for this user: %s in database", userID)
