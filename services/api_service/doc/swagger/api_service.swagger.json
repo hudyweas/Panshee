@@ -1,0 +1,501 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Panshee_api_service",
+    "version": "1.0",
+    "contact": {
+      "name": "Jakub Hudziak",
+      "url": "https://github.com/hudyweas/",
+      "email": "jakub.k.hudziak@gmail.com"
+    }
+  },
+  "tags": [
+    {
+      "name": "ApiService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/user": {
+      "post": {
+        "summary": "Function to ad user to database\n(-- api-linter: core::0133::http-body=disabled\n    aip.dev/not-precedent: Password needs to be in body. --)\n(-- api-linter: core::0133::method-signature=disabled\n    aip.dev/not-precedent: Password is a secret. --)",
+        "operationId": "ApiService_CreateUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoUser"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/protoCreateUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ApiService"
+        ]
+      }
+    },
+    "/v1/user:login": {
+      "post": {
+        "summary": "Function to login user",
+        "operationId": "ApiService_LoginUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoLoginUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/protoLoginUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ApiService"
+        ]
+      }
+    },
+    "/v1/{name}": {
+      "get": {
+        "summary": "Function to get user from database",
+        "operationId": "ApiService_GetUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoUser"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "Id of the user to get",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "user/[^/]+"
+          }
+        ],
+        "tags": [
+          "ApiService"
+        ]
+      }
+    },
+    "/v1/{parent}": {
+      "get": {
+        "summary": "Function to get all wallets of the specific user and its currency",
+        "operationId": "ApiService_GetWallets",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoGetWalletDTODataResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent",
+            "description": "id of the user to who wants to get his wallets",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "user/[^/]+/wallets/[^/]+"
+          }
+        ],
+        "tags": [
+          "ApiService"
+        ]
+      },
+      "delete": {
+        "summary": "Function to delete wallet from specific user",
+        "operationId": "ApiService_DeleteWallet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoDeleteWalletResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent",
+            "description": "id of the user to who wants to delete his wallet",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "user/[^/]+/wallets/[^/]+"
+          }
+        ],
+        "tags": [
+          "ApiService"
+        ]
+      }
+    },
+    "/v1/{parent}/token:refresh": {
+      "post": {
+        "summary": "Function to refresh acces token from refresh token",
+        "operationId": "ApiService_RefreshAccessToken",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoRefreshAccessTokenDTOResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent",
+            "description": "id of the user to who wants to refresh token",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "user/[^/]+"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "refreshToken": {
+                  "$ref": "#/definitions/protoTokenDTO",
+                  "title": "Refresh token used to refresh access token"
+                }
+              },
+              "title": "A representation of a request for refreshing access token"
+            }
+          }
+        ],
+        "tags": [
+          "ApiService"
+        ]
+      }
+    },
+    "/v1/{parent}/wallets": {
+      "post": {
+        "summary": "Function to add wallet to specified user",
+        "operationId": "ApiService_CreateWallet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/protoWalletDTO"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "parent",
+            "description": "id of the user to who wants to create new wallet",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "user/[^/]+"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "wallet": {
+                  "$ref": "#/definitions/protoWalletDTO"
+                }
+              },
+              "title": "Request to Create Wallet function"
+            }
+          }
+        ],
+        "tags": [
+          "ApiService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protoCreateUserRequest": {
+      "type": "object",
+      "properties": {
+        "parent": {
+          "type": "string",
+          "title": "Parent"
+        },
+        "user": {
+          "$ref": "#/definitions/protoUser",
+          "title": "User to create"
+        },
+        "password": {
+          "type": "string",
+          "title": "Password of the user"
+        }
+      },
+      "title": "Request for creating new user",
+      "required": [
+        "parent",
+        "password"
+      ]
+    },
+    "protoCurrencyDTO": {
+      "type": "object",
+      "properties": {
+        "tokenName": {
+          "type": "string",
+          "title": "Name of the token"
+        },
+        "tokenSymbol": {
+          "type": "string",
+          "title": "Symbol of the token"
+        },
+        "amount": {
+          "type": "number",
+          "format": "float",
+          "title": "Amount of tokens in the wallet"
+        },
+        "priceUSD": {
+          "type": "number",
+          "format": "float",
+          "title": "Token Price"
+        },
+        "priceChangePercentage24h": {
+          "type": "number",
+          "format": "float",
+          "title": "Price change in % from last 24h"
+        }
+      },
+      "title": "Representation of tokens"
+    },
+    "protoDeleteWalletResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "title": "information if deleting wallet was successful"
+        }
+      },
+      "title": "Response to Delete Wallet function"
+    },
+    "protoGetWalletDTODataResponse": {
+      "type": "object",
+      "properties": {
+        "wallets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protoWalletDTO"
+          },
+          "title": "List of user's wallets"
+        }
+      },
+      "title": "Response of the get wallet function"
+    },
+    "protoLoginUserRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "title": "Email of the user"
+        },
+        "password": {
+          "type": "string",
+          "title": "password of the user"
+        }
+      },
+      "title": "Request for looging",
+      "required": [
+        "email",
+        "password"
+      ]
+    },
+    "protoLoginUserResponse": {
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "type": "string",
+          "title": "Session of current user"
+        },
+        "accessToken": {
+          "$ref": "#/definitions/protoTokenDTO",
+          "title": "Access token for current user"
+        },
+        "refreshToken": {
+          "$ref": "#/definitions/protoTokenDTO",
+          "title": "Refresh token for current user to refreshing access token"
+        },
+        "user": {
+          "$ref": "#/definitions/protoUser",
+          "title": "Current User"
+        }
+      },
+      "title": "Response for logging user"
+    },
+    "protoRefreshAccessTokenDTOResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "$ref": "#/definitions/protoTokenDTO",
+          "title": "Access token returning to user"
+        }
+      },
+      "title": "Response with new access_token"
+    },
+    "protoTokenDTO": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "title": "Token string"
+        },
+        "expirationTime": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Expiration time of the token"
+        }
+      },
+      "title": "Structure of a token"
+    },
+    "protoUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Id of the user"
+        },
+        "email": {
+          "type": "string",
+          "title": "Email of the user"
+        },
+        "active": {
+          "type": "boolean",
+          "title": "User have active account or not"
+        },
+        "createTime": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Creation time of the user"
+        },
+        "updateTime": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Last update time of the user"
+        },
+        "deleteTime": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Time when user was deleted"
+        }
+      },
+      "title": "Structure of a user"
+    },
+    "protoWalletDTO": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string",
+          "title": "Wallet address"
+        },
+        "tokens": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protoCurrencyDTO"
+          },
+          "title": "List of tokens in the wallet"
+        }
+      },
+      "title": "Representation of wallet"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

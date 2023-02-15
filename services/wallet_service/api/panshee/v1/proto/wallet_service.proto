@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package api.panshee.v1.proto;
 
+import "protoc-gen-openapiv2/options/annotations.proto";
 import "panshee/v1/proto/wallet.proto";
 
 option go_package = ".;pb";

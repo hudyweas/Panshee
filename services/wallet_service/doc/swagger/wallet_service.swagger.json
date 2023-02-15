@@ -1,8 +1,13 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "panshee/v1/proto/wallet.proto",
-    "version": "version not set"
+    "title": "panshee/services/wallet_service",
+    "version": "1.0",
+    "contact": {
+      "name": "Jakub Hudziak",
+      "url": "https://github.com/hudyweas/",
+      "email": "hudyweas@gmail.com"
+    }
   },
   "tags": [
     {
@@ -21,38 +26,47 @@
       "type": "object",
       "properties": {
         "tokenName": {
-          "type": "string"
+          "type": "string",
+          "title": "Name of the token"
         },
         "tokenSymbol": {
-          "type": "string"
+          "type": "string",
+          "title": "Symbol of the token"
         },
         "amount": {
           "type": "number",
-          "format": "float"
+          "format": "float",
+          "title": "Amount of tokens in the wallet"
         },
         "priceUSD": {
           "type": "number",
-          "format": "float"
+          "format": "float",
+          "title": "Token Price"
         },
         "priceChangePercentage24h": {
           "type": "number",
-          "format": "float"
+          "format": "float",
+          "title": "Price change in % from last 24h"
         }
-      }
+      },
+      "title": "Representation of tokens"
     },
     "protoWallet": {
       "type": "object",
       "properties": {
         "address": {
-          "type": "string"
+          "type": "string",
+          "title": "Wallet address"
         },
         "tokens": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/protoCurrency"
-          }
+          },
+          "title": "List of tokens in the wallet"
         }
-      }
+      },
+      "title": "Representation of wallet"
     },
     "protobufAny": {
       "type": "object",

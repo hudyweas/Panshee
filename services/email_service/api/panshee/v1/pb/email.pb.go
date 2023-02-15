@@ -142,7 +142,7 @@ type SendEmailResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Email sent
+	// Email sent back
 	Email *Email `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
 }
 

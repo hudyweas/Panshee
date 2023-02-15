@@ -16,7 +16,7 @@ proto:
 	protoc --proto_path=api --go_out=./api/panshee/v1/pb \
 	--go-grpc_out=./api/panshee/v1/pb \
 	--grpc-gateway_out=./api/panshee/v1/pb \
-	# --openapiv2_out=./doc/swagger --openapiv2_opt=allow_merge=true,merge_file_name=api_service \
+	--openapiv2_out=./doc/swagger --openapiv2_opt=allow_merge=true,merge_file_name=api_service \
 	./api/panshee/v1/proto/*.proto
 
 protov2:

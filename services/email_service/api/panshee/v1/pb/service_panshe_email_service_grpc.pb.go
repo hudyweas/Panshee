@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PansheeEmailServiceClient interface {
+	// Function to send email
 	SendEmail(ctx context.Context, in *SendEmailRequest, opts ...grpc.CallOption) (*SendEmailResponse, error)
 }
 
@@ -46,6 +47,7 @@ func (c *pansheeEmailServiceClient) SendEmail(ctx context.Context, in *SendEmail
 // All implementations must embed UnimplementedPansheeEmailServiceServer
 // for forward compatibility
 type PansheeEmailServiceServer interface {
+	// Function to send email
 	SendEmail(context.Context, *SendEmailRequest) (*SendEmailResponse, error)
 	mustEmbedUnimplementedPansheeEmailServiceServer()
 }

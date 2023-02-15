@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+import "google/api/field_behavior.proto";
 package api.panshee.v1.proto;
 
 option java_package = "api.panshee.v1.proto";
@@ -10,8 +11,8 @@ option go_package = ".;pb";
 
 // Request to get wallet function
 message GetWalletDataRequest {
-    // id of the user to who wants to get his wallets
-    string parent = 1 [(google.api.field_behavior) = REQUIRED];
+    // wallet address
+    string walletAddress = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 // Representation of wallet
@@ -19,7 +20,7 @@ message Wallet {
     // Wallet address
     string address = 1;
     // List of tokens in the wallet
-    repeated CurrencyDTO tokens = 2;
+    repeated Currency tokens = 2;
 }
 
 // Representation of tokens

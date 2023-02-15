@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PansheeWalletServiceClient interface {
+	// Function to get data from specific wallet
 	GetWalletData(ctx context.Context, in *GetWalletDataRequest, opts ...grpc.CallOption) (*Wallet, error)
 }
 
@@ -46,6 +47,7 @@ func (c *pansheeWalletServiceClient) GetWalletData(ctx context.Context, in *GetW
 // All implementations must embed UnimplementedPansheeWalletServiceServer
 // for forward compatibility
 type PansheeWalletServiceServer interface {
+	// Function to get data from specific wallet
 	GetWalletData(context.Context, *GetWalletDataRequest) (*Wallet, error)
 	mustEmbedUnimplementedPansheeWalletServiceServer()
 }

@@ -45,7 +45,7 @@
       "properties": {
         "email": {
           "$ref": "#/definitions/protoEmail",
-          "title": "Email sent"
+          "title": "Email sent back"
         }
       },
       "title": "A representation of a Send Email Reponse"
