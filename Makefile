@@ -1,8 +1,12 @@
 api:
-	go run ./services/api_service .
+	cd ./services/api_service
+	# go run .
 auth:
-	go run ./services/auth_service .
+	cd ./services/auth_service
+	# go run .
 email:
-	go run ./services/email_service .
+	cd ./services/email_service
+	# go run .
 wallet:
-	go run ./services/wallet_service .
+	cd ./services/wallet_service
+	# go run .

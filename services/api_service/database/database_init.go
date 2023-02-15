@@ -7,9 +7,8 @@ func (db *data) Init() error {
 		return err
 	}
 
-	//TODO:
-	db.NewDropTable().Model(&User{}).Exec(context.Background())
-	db.NewDropTable().Model(&Wallet{}).Exec(context.Background())
+	// db.NewDropTable().Model(&User{}).Exec(context.Background())
+	// db.NewDropTable().Model(&Wallet{}).Exec(context.Background())
 
 	_, err := db.NewCreateTable().IfNotExists().Model(&User{}).Exec(context.Background())
 	if err != nil{

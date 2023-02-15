@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"math"
 
 	"github.com/hudyweas/panshee/services/wallet_service/api/panshee/v1/pb"
 	"github.com/hudyweas/panshee/services/wallet_service/api/panshee/v1/pb/converters"
@@ -16,7 +17,6 @@ func (s *Server) GetWalletData(ctx context.Context, req *pb.GetWalletDataRequest
 		return nil, status.Errorf(codes.InvalidArgument, validationErrors)
 	}
 
-	//TODO: implement bnb
 	bnbBalance, err := s.bsc.GetBnbBalanceFromAddress(req.GetWalletAddress())
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, err.Error())
@@ -25,7 +25,7 @@ func (s *Server) GetWalletData(ctx context.Context, req *pb.GetWalletDataRequest
 	bnbCurrency := wallet.Currency{
 		TokenName:   "BNB",
 		TokenSymbol: "BNB",
-		Amount:      bnbBalance,
+		Amount:      bnbBalance / math.Pow10(18),
 	}
 
 	bep20list, err := s.bsc.GetBep20ListFromAddress(req.GetWalletAddress())

@@ -15,7 +15,7 @@ func (bsc bscscanapi) GetBnbBalanceFromAddress(walletAddress string) (f float64,
 	req := fmt.Sprintf(getBnbBalace, walletAddress, bsc.key)
 
 	bnb := BnbBalance{}
-	if err = httpmethods.GetHttpJsonAndDecode(req, &bnb); err != nil{
+	if _, err = httpmethods.GetHttpJsonAndDecode(req, &bnb); err != nil{
 		return
 	}
 

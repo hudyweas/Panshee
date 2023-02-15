@@ -14,7 +14,7 @@ func (bsc bscscanapi) GetBep20ListFromAddress(walletAddress string) (bep20 []Bep
 	req := fmt.Sprintf(getBep20List, walletAddress, bsc.key)
 
 	bep20response := Bep20TransListResponse{}
-	if err = httpmethods.GetHttpJsonAndDecode(req, &bep20response); err != nil{
+	if _, err = httpmethods.GetHttpJsonAndDecode(req, &bep20response); err != nil{
 		return
 	}
 

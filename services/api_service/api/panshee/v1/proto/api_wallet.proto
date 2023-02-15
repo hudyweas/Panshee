@@ -10,41 +10,53 @@ option java_outer_classname = "WalletProto";
 
 option go_package = ".;pb";
 
-//TODO:
-
+// Request to Create Wallet function
 message CreateWalletRequest {
     // id of the user to who wants to create new wallet
     string  parent = 1 [(google.api.field_behavior) = REQUIRED];
     WalletDTO wallet = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
+// Request to Delete Wallet function
 message DeleteWalletRequest {
     // id of the user to who wants to delete his wallet
     string parent = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
+// Response to Delete Wallet function
 message DeleteWalletResponse {
+    //information if deleting wallet was successful
     bool success = 1;
 }
-
+// Request to get wallet function
 message GetWalletDTODataRequest {
     // id of the user to who wants to get his wallets
     string parent = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
+// Response of the get wallet function
 message GetWalletDTODataResponse {
+    // List of user's wallets
     repeated WalletDTO wallets = 1;
 }
 
+// Representation of wallet
 message WalletDTO {
+    // Wallet address
     string address = 1;
+    // List of tokens in the wallet
     repeated CurrencyDTO tokens = 2;
 }
-
+// Representation of tokens
 message CurrencyDTO {
+    // Name of the token
     string tokenName = 1;
+    // Symbol of the token
     string tokenSymbol = 2;
+    // Amount of tokens in the wallet
     float amount = 3;
+    // Token Price
     float priceUSD = 4;
+    // Price change in % from last 24h
     float priceChangePercentage24h = 5;
 }

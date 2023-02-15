@@ -26,6 +26,6 @@ message SendEmailRequest {
 
 // A representation of a Send Email Reponse
 message SendEmailResponse {
-    //Email sent
+    //Email sent back
     Email email = 1;
 }

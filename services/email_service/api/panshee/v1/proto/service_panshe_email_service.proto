@@ -20,6 +20,8 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
     };
 };
 
+// Service which sents email to the users
 service PansheeEmailService {
+    // Function to send email
     rpc SendEmail (SendEmailRequest) returns (SendEmailResponse) {}
 }

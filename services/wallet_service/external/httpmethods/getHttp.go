@@ -5,8 +5,8 @@ import (
 	"net/http"
 )
 
-func GetHttpJsonAndDecode(req string, v interface{}) (err error) {
-	resp, err := http.Get(req)
+func GetHttpJsonAndDecode(req string, v interface{}) (resp *http.Response,  err error) {
+	resp, err = http.Get(req)
 	if err != nil {
 		return
 	}

@@ -14,7 +14,10 @@ const (
 
 func GetTokenIDs() ([]TokenID, map[string]int, error) {
 	ids := []TokenID{}
-	if err := httpmethods.GetHttpJsonAndDecode(getTokenID, &ids); err != nil {
+	if resp, err := httpmethods.GetHttpJsonAndDecode(getTokenID, &ids); err != nil {
+		if (resp.StatusCode == 429) {
+			return nil, nil, fmt.Errorf("Please try again in a minute. Too many response to coingecko api")
+		}
 		return nil, nil, err
 	}
 
@@ -51,7 +54,10 @@ func GetTokenPriceFromTokenSymbolList(tokenSymbols []string) ([]TokenPrice, erro
 	req := fmt.Sprintf(getTokenPrices, tokenIdString)
 
 	price := []TokenPrice{}
-	if err := httpmethods.GetHttpJsonAndDecode(req, &price); err != nil {
+	if resp, err := httpmethods.GetHttpJsonAndDecode(req, &price); err != nil {
+		if (resp.StatusCode == 429) {
+			return nil, fmt.Errorf("Please try again in a minute. Too many response to coingecko api")
+		}
 		return nil, err
 	}
 

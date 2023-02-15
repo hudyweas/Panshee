@@ -7,7 +7,6 @@ const (
 	ErrNoDataInDatabase         = "no data in database"
 )
 
-//TODO:
 func DatabaseErrorWrapper(err error) error{
 	switch err.Error(){
 	case "sql: no rows in result set":

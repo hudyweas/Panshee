@@ -2,6 +2,14 @@ syntax = "proto3";
 
 package api.panshee.v1.proto;
 
+// import "protoc-gen-openapiv2/options/annotations.proto";
+// import "google/api/client.proto";
+// import "google/api/annotations.proto";
+
+// import "panshee/v1/proto/api_user.proto";
+// import "panshee/v1/proto/api_token.proto";
+// import "panshee/v1/proto/api_wallet.proto";
+
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "google/api/client.proto";
 import "google/api/annotations.proto";
@@ -74,15 +82,17 @@ service ApiService {
         option (google.api.method_signature) = "parent,refresh_token";
     }
 
+    // Function to add wallet to specified user
     rpc CreateWallet(CreateWalletRequest) returns (WalletDTO) {
         option (google.api.http) = {
             post: "/v1/{parent=user/*}/wallets"
-            body: "wallet"
+            body: "*"
         };
 
-        option (google.api.method_signature) = "parent";
+        option (google.api.method_signature) = "parent,wallet";
     }
 
+    // Function to get all wallets of the specific user and its currency
     rpc GetWallets(GetWalletDTODataRequest) returns (GetWalletDTODataResponse){
         option (google.api.http) = {
             get: "/v1/{parent=user/*/wallets/*}"
@@ -91,6 +101,7 @@ service ApiService {
         option (google.api.method_signature) = "parent";
     }
 
+    // Function to delete wallet from specific user
     rpc DeleteWallet(DeleteWalletRequest) returns (DeleteWalletResponse){
         option (google.api.http) = {
             delete: "/v1/{parent=user/*/wallets/*}"

@@ -8,19 +8,30 @@ option java_outer_classname = "WalletProto";
 
 option go_package = ".;pb";
 
+// Request to get wallet function
 message GetWalletDataRequest {
-    string walletAddress = 1;
+    // id of the user to who wants to get his wallets
+    string parent = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
+// Representation of wallet
 message Wallet {
+    // Wallet address
     string address = 1;
-    repeated Currency tokens = 2;
+    // List of tokens in the wallet
+    repeated CurrencyDTO tokens = 2;
 }
 
+// Representation of tokens
 message Currency {
+    // Name of the token
     string tokenName = 1;
+    // Symbol of the token
     string tokenSymbol = 2;
+    // Amount of tokens in the wallet
     float amount = 3;
+    // Token Price
     float priceUSD = 4;
+    // Price change in % from last 24h
     float priceChangePercentage24h = 5;
 }

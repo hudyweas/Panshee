@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/hudyweas/panshee/services/api_service/api/panshee/v1/pb"
@@ -14,6 +15,7 @@ import (
 
 func (s *Server) CreateWallet(ctx context.Context, req *pb.CreateWalletRequest) (*pb.WalletDTO, error) {
 	//checking request validation
+	fmt.Println(req)
 	if validationErrors := validateCreateWalletRequest(req); len(validationErrors) > 0{
 		return nil, status.Errorf(codes.InvalidArgument, validationErrors)
 	}

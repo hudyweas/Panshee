@@ -98,7 +98,7 @@ func (w *Wallet) ClearEmptyAndScamCurrency() {
 	noEmptyCurrency := *new([]Currency)
 
 	for _, c := range w.Currency {
-		if c.Amount != 0.0 && c.PriceUSD != 0.0 {
+		if c.Amount != 0.0 && c.PriceUSD > 0.0 && c.PriceUSD * c.Amount > 0.001 {
 			noEmptyCurrency = append(noEmptyCurrency, c)
 		}
 	}

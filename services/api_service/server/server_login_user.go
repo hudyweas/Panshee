@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"fmt"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -13,6 +14,7 @@ import (
 	"github.com/hudyweas/panshee/services/api_service/internal/contextData"
 	val "github.com/hudyweas/panshee/services/api_service/internal/validators"
 	authPb "github.com/hudyweas/panshee/services/api_service/services/auth_service/pb"
+	emailPb "github.com/hudyweas/panshee/services/api_service/services/email_service/pb"
 )
 
 func (s *Server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (*pb.LoginUserResponse, error) {
@@ -51,6 +53,17 @@ func (s *Server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (*pb.L
 			ExpirationTime: loginResponse.RefreshToken.GetExpirationTime(),
 		},
 		User:         converters.ConvertDbUserToPbUser(*user),
+	}
+
+	_, err = s.services.EmailService.SendEmail(context.Background(), &emailPb.SendEmailRequest{
+		Email: &emailPb.Email{
+			To:      user.Email,
+			Subject: "New log in",
+			Message: fmt.Sprintf("New log in from %s, %s", contextData.GetUserAgent(ctx), contextData.GetClientIP(ctx)),
+		},
+	})
+	if err != nil {
+		return nil, err
 	}
 
 	return rsp, nil

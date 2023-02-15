@@ -45,8 +45,8 @@ func (s *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb
 	_, err = s.services.EmailService.SendEmail(context.Background(), &emailPb.SendEmailRequest{
 		Email: &emailPb.Email{
 			To:      createdUser.Email,
-			Subject: "Zalozenie konta",
-			Message: "Brawo",
+			Subject: "Account creation!",
+			Message: "You have succesfully created an account!",
 		},
 	})
 	if err != nil {

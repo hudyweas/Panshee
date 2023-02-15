@@ -31,20 +31,13 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 // Service for user authentication, session and password storing
 service AuthService {
-  //TODO:
-  // // Create to get a session from database
-  // rpc GetSession(GetSessionRequest) returns (Session) {}
 
   // Function to add a password to the specific user
   rpc CreateUserPassword(CreateUserPasswordRequest) returns (Empty) {}
-  //TODO:
-  // // Function to update a password of the specific user
-  // rpc UpdateUserPassword(UpdateUserPasswordRequest) returns (Empty) {}
-  // // Fcuntion to check if password is correct for specific user
-  // rpc ValidateUserPassword(ValidateUserPasswordRequest) returns (ValidateUserPasswordResponse) {}
 
   // Returns true if access token is valid. False otherwise
   rpc ValidateAccessToken(ValidateAccessTokenRequest) returns (ValidateAccessTokenResponse) {}
+
   // Function to refresh access token from refresh token
   rpc RefreshAccessToken(RefreshAccessTokenRequest) returns (RefreshAccessTokenResponse){}
 
