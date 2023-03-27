@@ -1,5 +1,8 @@
 # Panshee
-Monorepo for Panshee application
+The tool is based on microservice architecture. It lets check basic 
+information about wallets and contained tokens from the BNB chain. 
+The whole tool is segmented into 5 microservices: API, auth, wallet, 
+email and front-end.
 
 ## Caution!
 To work environmental variables are needed to set (.env in the main folder of every service). 
